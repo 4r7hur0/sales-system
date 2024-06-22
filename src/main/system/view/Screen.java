@@ -1,5 +1,7 @@
 package main.system.view;
 
+import main.system.facade.SalesFacade;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -7,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.io.*;
 
 public class Screen extends Component implements Serializable {
+    private SalesFacade facade = new SalesFacade();
     private Container containerCenter;
     private Container containerLeft;
     private Container containerRight;
@@ -50,11 +53,11 @@ public class Screen extends Component implements Serializable {
         labelCenter.setForeground(new Color(43, 169, 202));
         labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
-        ImageIcon imagem = new ImageIcon("src/main/system/view/logo-uefs.png");
-        Image tamImagem = imagem.getImage().getScaledInstance(120, 70, Image.SCALE_SMOOTH);//ajustando a imagem
+        ImageIcon image = new ImageIcon("src/main/system/view/logo-uefs.png");
+        Image sizeImage = image.getImage().getScaledInstance(120, 70, Image.SCALE_SMOOTH);//ajustando a imagem
 
         //cria um novo ImageIcon com a imagem redimensionada
-        ImageIcon setTamImagem = new ImageIcon(tamImagem);
+        ImageIcon setTamImagem = new ImageIcon(sizeImage);
         JLabel labelRight = new JLabel(setTamImagem, JLabel.CENTER);
 
         containerLeft.add(new Label(""));
@@ -63,48 +66,72 @@ public class Screen extends Component implements Serializable {
         containerRight.add(labelRight, BorderLayout.NORTH);
 
         //definindo botões para o Container da Esquerda
-        JButton cadastrarUsuario = new JButton("Cadastrar usuário");
-        JButton fazerLogin = new JButton("Fazer login");
-        JButton cadastrarProduto = new JButton("Cadastrar produto");
-        JButton cadastrarLeilao = new JButton("Cadastrar leilao");
-        JButton iniciarLeilao = new JButton("Iniciar leilao manual");
-        JButton encerrarLeilao = new JButton("Encerrar leilao manual");
-        JButton participarLeilao = new JButton("Participar de um leilao");
-        JButton darLance = new JButton("Dar lance");
-        JButton darLanceMinimo = new JButton("Dar lance minimo");
-        JButton listarUsuarios = new JButton("Listar todos os usuários");
-        JButton listarProdutos = new JButton("Listar todos os produtos");
-        JButton listarLeiloes = new JButton("Listar todos os leilões");
-        JButton listarLances = new JButton("Abrir envelopes Leilão A. Fechado");
-        JButton leiloesEmUmPeriodo = new JButton("Listar leilões de um período.");
-        JButton salvar = new JButton("Salvar arquivo");
-        JButton carregar = new JButton("Carregar arquivo");
-        JButton userLogado = new JButton("Usuário logado");
+        JButton registerUser = new JButton("Cadastrar usuário");
 
-        containerLeft.add(cadastrarUsuario);
-        containerLeft.add(fazerLogin);
-        containerLeft.add(cadastrarProduto);
-        containerLeft.add(cadastrarLeilao);
-        containerLeft.add(iniciarLeilao);
-        containerLeft.add(encerrarLeilao);
-        containerLeft.add(participarLeilao);
-        containerLeft.add(darLance);
-        containerLeft.add(darLanceMinimo);
-        containerLeft.add(listarUsuarios);
-        containerLeft.add(listarProdutos);
-        containerLeft.add(listarLeiloes);
-        containerLeft.add(listarLances);
-        containerLeft.add(leiloesEmUmPeriodo);
-        containerLeft.add(salvar);
-        containerLeft.add(carregar);
-        containerLeft.add(userLogado);
+        containerLeft.add(registerUser);
 
+        registerUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerUser();
+            }
+        });
     }
 
-    //Fazer cadastro de usuário, onde no cadastro será selecionado se ele é comprador ou vendedor
-    //login
-    //senha
-    //email
-    //metodo de pagamento
+    public void registerUser() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(7, 2, 10, 10));
+
+        JLabel loginLabel = new JLabel("Digite o seu login:", SwingConstants.CENTER);
+        JTextField loginField = new JTextField();
+        containerCenter.add(loginLabel);
+        containerCenter.add(loginField);
+
+        JLabel nameLabel = new JLabel("Digite o seu nome:", SwingConstants.CENTER);
+        JTextField nameField = new JTextField();
+        containerCenter.add(nameLabel);
+        containerCenter.add(nameField);
+
+        JLabel passwordLabel = new JLabel("Digite a sua senha:", SwingConstants.CENTER);
+        JTextField passwordField = new JTextField();
+        containerCenter.add(passwordLabel);
+        containerCenter.add(passwordField);
+
+        JLabel emailLabel = new JLabel("Digite o seu email:", SwingConstants.CENTER);
+        JTextField emailField = new JTextField();
+        containerCenter.add(emailLabel);
+        containerCenter.add(emailField);
+
+        JLabel addressLabel = new JLabel("Digite o seu endereço:", SwingConstants.CENTER);
+        JTextField addressField = new JTextField();
+        containerCenter.add(addressLabel);
+        containerCenter.add(addressField);
+
+        JLabel paymentLabel = new JLabel("Digite a sua forma de pagamento:", SwingConstants.CENTER);
+        JTextField paymentField = new JTextField();
+        containerCenter.add(paymentLabel);
+        containerCenter.add(paymentField);
+
+
+        JLabel sendLabel = new JLabel("Verifique se está tudo correto antes de enviar", SwingConstants.CENTER);
+        JButton sendButton = new JButton("Enviar");
+        containerCenter.add(sendLabel);
+        containerCenter.add(sendButton);
+
+        sendButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
+                        emailField.getText(), addressField.getText(), Integer.parseInt(paymentField.getText()));
+                JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                containerCenter.removeAll();
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
 
 }
