@@ -24,4 +24,13 @@ public class SalesController {
             listUsers.add(seller);
         }
     }
+
+    public User loginUser(String login, String senha) throws Exception {
+        User u = mapUsers.get(login);
+        if (u != null && u.getPassword().equals(senha))
+            user = u;
+        else
+            throw new Exception("Login falhou");
+        return u;
+    }
 }

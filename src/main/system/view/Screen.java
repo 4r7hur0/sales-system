@@ -67,8 +67,10 @@ public class Screen extends Component implements Serializable {
 
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
+        JButton loginUser = new JButton("Fazer login");
 
         containerLeft.add(registerUser);
+        containerLeft.add(loginUser);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -76,54 +78,195 @@ public class Screen extends Component implements Serializable {
                 registerUser();
             }
         });
+
+        loginUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginUser();
+            }
+        });
     }
 
     public void registerUser() {
         containerCenter.removeAll();
-        containerCenter.setLayout(new GridLayout(7, 2, 10, 10));
+        containerCenter.setLayout(new GridLayout(3, 3, 10, 10));
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        JPanel center = new JPanel(new GridLayout(2, 1, 10, 10));
+        containerCenter.add(center);
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
 
-        JLabel loginLabel = new JLabel("Digite o seu login:", SwingConstants.CENTER);
-        JTextField loginField = new JTextField();
-        containerCenter.add(loginLabel);
-        containerCenter.add(loginField);
+        JButton btnSeller = new JButton("Cadastrar vendedor");
+        JButton btnBuyer = new JButton("Cadastrar comprador");
 
-        JLabel nameLabel = new JLabel("Digite o seu nome:", SwingConstants.CENTER);
-        JTextField nameField = new JTextField();
-        containerCenter.add(nameLabel);
-        containerCenter.add(nameField);
+        center.add(btnSeller);
+        center.add(btnBuyer);
 
-        JLabel passwordLabel = new JLabel("Digite a sua senha:", SwingConstants.CENTER);
-        JTextField passwordField = new JTextField();
-        containerCenter.add(passwordLabel);
-        containerCenter.add(passwordField);
-
-        JLabel emailLabel = new JLabel("Digite o seu email:", SwingConstants.CENTER);
-        JTextField emailField = new JTextField();
-        containerCenter.add(emailLabel);
-        containerCenter.add(emailField);
-
-        JLabel addressLabel = new JLabel("Digite o seu endereço:", SwingConstants.CENTER);
-        JTextField addressField = new JTextField();
-        containerCenter.add(addressLabel);
-        containerCenter.add(addressField);
-
-        JLabel paymentLabel = new JLabel("Digite a sua forma de pagamento:", SwingConstants.CENTER);
-        JTextField paymentField = new JTextField();
-        containerCenter.add(paymentLabel);
-        containerCenter.add(paymentField);
-
-
-        JLabel sendLabel = new JLabel("Verifique se está tudo correto antes de enviar", SwingConstants.CENTER);
-        JButton sendButton = new JButton("Enviar");
-        containerCenter.add(sendLabel);
-        containerCenter.add(sendButton);
-
-        sendButton.addActionListener(new ActionListener() {
+        btnSeller.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
-                        emailField.getText(), addressField.getText(), Integer.parseInt(paymentField.getText()));
-                JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                containerCenter.removeAll();
+                containerCenter.setLayout(new GridLayout(6, 2, 10, 10));
+
+                JLabel loginLabel = new JLabel("Digite o seu login:", SwingConstants.CENTER);
+                JTextField loginField = new JTextField();
+                containerCenter.add(loginLabel);
+                containerCenter.add(loginField);
+
+                JLabel nameLabel = new JLabel("Digite o seu nome:", SwingConstants.CENTER);
+                JTextField nameField = new JTextField();
+                containerCenter.add(nameLabel);
+                containerCenter.add(nameField);
+
+                JLabel passwordLabel = new JLabel("Digite a sua senha:", SwingConstants.CENTER);
+                JTextField passwordField = new JTextField();
+                containerCenter.add(passwordLabel);
+                containerCenter.add(passwordField);
+
+                JLabel emailLabel = new JLabel("Digite o seu email:", SwingConstants.CENTER);
+                JTextField emailField = new JTextField();
+                containerCenter.add(emailLabel);
+                containerCenter.add(emailField);
+
+                JLabel addressLabel = new JLabel("Digite o seu endereço:", SwingConstants.CENTER);
+                JTextField addressField = new JTextField();
+                containerCenter.add(addressLabel);
+                containerCenter.add(addressField);
+
+
+                JLabel sendLabel = new JLabel("Verifique se está tudo correto antes de enviar", SwingConstants.CENTER);
+                JButton sendButton = new JButton("Enviar");
+                containerCenter.add(sendLabel);
+                containerCenter.add(sendButton);
+
+                sendButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
+                                emailField.getText(), addressField.getText(), 0);
+                        JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                        containerCenter.removeAll();
+                        containerCenter.revalidate();
+                        containerCenter.repaint();
+                    }
+                });
+
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        btnBuyer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                containerCenter.removeAll();
+                containerCenter.setLayout(new GridLayout(7, 2, 10, 10));
+
+                JLabel loginLabel = new JLabel("Digite o seu login:", SwingConstants.CENTER);
+                JTextField loginField = new JTextField();
+                containerCenter.add(loginLabel);
+                containerCenter.add(loginField);
+
+                JLabel nameLabel = new JLabel("Digite o seu nome:", SwingConstants.CENTER);
+                JTextField nameField = new JTextField();
+                containerCenter.add(nameLabel);
+                containerCenter.add(nameField);
+
+                JLabel passwordLabel = new JLabel("Digite a sua senha:", SwingConstants.CENTER);
+                JTextField passwordField = new JTextField();
+                containerCenter.add(passwordLabel);
+                containerCenter.add(passwordField);
+
+                JLabel emailLabel = new JLabel("Digite o seu email:", SwingConstants.CENTER);
+                JTextField emailField = new JTextField();
+                containerCenter.add(emailLabel);
+                containerCenter.add(emailField);
+
+                JLabel addressLabel = new JLabel("Digite o seu endereço:", SwingConstants.CENTER);
+                JTextField addressField = new JTextField();
+                containerCenter.add(addressLabel);
+                containerCenter.add(addressField);
+
+                JLabel paymentLabel = new JLabel("Digite a sua forma de pagamento:", SwingConstants.CENTER);
+                JTextField paymentField = new JTextField();
+                containerCenter.add(paymentLabel);
+                containerCenter.add(paymentField);
+
+
+                JLabel sendLabel = new JLabel("Verifique se está tudo correto antes de enviar", SwingConstants.CENTER);
+                JButton sendButton = new JButton("Enviar");
+                containerCenter.add(sendLabel);
+                containerCenter.add(sendButton);
+
+                sendButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
+                                emailField.getText(), addressField.getText(), Integer.parseInt(paymentField.getText()));
+                        JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                        containerCenter.removeAll();
+                        containerCenter.revalidate();
+                        containerCenter.repaint();
+                    }
+                });
+
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void loginUser(){
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(3, 2));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+
+
+        JLabel loginLabel = new JLabel("Login:", SwingConstants.CENTER);
+        JTextField loginField = new JTextField();
+        center.add(loginLabel);
+        center.add(loginField);
+
+        JLabel senhaLabel = new JLabel("Senha:", SwingConstants.CENTER);
+        JTextField senhaField = new JTextField();
+        center.add(senhaLabel);
+        center.add(senhaField);
+
+        JLabel enviarLabel = new JLabel();
+        JButton enviarButton = new JButton("Enviar");
+        center.add(enviarLabel);
+        center.add(enviarButton);
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    facade.loginUser(loginField.getText(), senhaField.getText());
+                    JOptionPane.showMessageDialog(null, "Você está logado!!");
+                    //fazer com que apareça, no container da esquerda, somente os botões disponíveis para o usuário logado
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Login ou senha incorreta!");
+                }
                 containerCenter.removeAll();
                 containerCenter.revalidate();
                 containerCenter.repaint();
