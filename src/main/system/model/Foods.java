@@ -1,10 +1,10 @@
 package main.system.model;
 
-public class clothes implements Product{
+public class Foods implements Product {
     private String type;
     private double price;
 
-    public clothes(String type, double price) {
+    public Foods(String type, double price) {
         this.type = type;
         this.price = price;
     }
