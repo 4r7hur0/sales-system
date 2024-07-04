@@ -1,6 +1,8 @@
 package main.system.view;
 
 import main.system.facade.SalesFacade;
+import main.system.model.Seller;
+import main.system.model.User;
 
 import javax.swing.*;
 import java.awt.*;
@@ -261,9 +263,15 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    facade.loginUser(loginField.getText(), senhaField.getText());
+                    User user = facade.loginUser(loginField.getText(), senhaField.getText());
                     JOptionPane.showMessageDialog(null, "Você está logado!!");
-                    //fazer com que apareça, no container da esquerda, somente os botões disponíveis para o usuário logado
+                    //container da esquerda, somente os botões disponíveis para o usuário logado
+                    if (user instanceof Seller){
+                        buttonsLeftSeller();
+                    }
+                    else {
+                        buttonsLeftBuyer();
+                    }
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Login ou senha incorreta!");
                 }
@@ -275,6 +283,76 @@ public class Screen extends Component implements Serializable {
 
         containerCenter.revalidate();
         containerCenter.repaint();
+    }
+
+    public void buttonsLeftSeller(){
+        containerLeft.removeAll();
+        containerLeft.add(new JLabel());
+        JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
+        containerLeft.add(labelLeft);
+
+        //definindo botões para o Container da Esquerda
+        JButton registerUser = new JButton("Cadastrar usuário");
+        JButton loginUser = new JButton("Fazer login");
+        JButton registerProduct = new JButton("Cadastrar produto");
+
+        containerLeft.add(registerUser);
+        containerLeft.add(loginUser);
+        containerLeft.add(registerProduct);
+
+        registerUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerUser();
+            }
+        });
+
+        loginUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginUser();
+            }
+        });
+
+        containerLeft.revalidate();
+        containerLeft.repaint();
+    }
+
+    public void buttonsLeftBuyer() {
+        containerLeft.removeAll();
+        containerLeft.add(new JLabel());
+        JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
+        containerLeft.add(labelLeft);
+
+        //definindo botões para o Container da Esquerda
+        JButton registerUser = new JButton("Cadastrar usuário");
+        JButton loginUser = new JButton("Fazer login");
+        JButton seeProducts = new JButton("Produtos à venda");
+        JButton viewCart = new JButton("Carrinho");
+        JButton viewOrders = new JButton("Pedidos");
+
+        containerLeft.add(registerUser);
+        containerLeft.add(loginUser);
+        containerLeft.add(seeProducts);
+        containerLeft.add(viewCart);
+        containerLeft.add(viewOrders);
+
+        registerUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerUser();
+            }
+        });
+
+        loginUser.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loginUser();
+            }
+        });
+
+        containerLeft.revalidate();
+        containerLeft.repaint();
     }
 
 }
