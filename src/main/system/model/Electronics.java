@@ -1,10 +1,10 @@
 package main.system.model;
 
-public class electronics implements Product{
+public class Electronics implements Product{
     private String type;
     private double price;
 
-    public electronics(String type, double price) {
+    public Electronics(String type, double price) {
         this.type = type;
         this.price = price;
     }
