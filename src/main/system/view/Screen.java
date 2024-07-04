@@ -355,4 +355,60 @@ public class Screen extends Component implements Serializable {
         containerLeft.repaint();
     }
 
+    public void registerProduct() {
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(4, 2));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+
+
+        JLabel tipoLabel = new JLabel("Tipo:", SwingConstants.CENTER);
+        JTextField tipoField = new JTextField();
+        center.add(tipoLabel);
+        center.add(tipoField);
+
+        JLabel descResLabel = new JLabel("Descriçao resumida:", SwingConstants.CENTER);
+        JTextField descResField = new JTextField();
+        center.add(descResLabel);
+        center.add(descResField);
+
+        JLabel descDetLabel = new JLabel("Descriçao detalhada:", SwingConstants.CENTER);
+        JTextField descDetField = new JTextField();
+        center.add(descDetLabel);
+        center.add(descDetField);
+
+        JLabel enviarLabel = new JLabel();
+        JButton enviarButton = new JButton("Enviar");
+        center.add(enviarLabel);
+        center.add(enviarButton);
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    //facade.cadastrarProduto(tipoField.getText(), descResField.getText(), descDetField.getText());
+                    JOptionPane.showMessageDialog(null, "Produto cadastrado!");
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Informação incorreta sobre o produto!");
+                }
+                containerCenter.removeAll();
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
 }
