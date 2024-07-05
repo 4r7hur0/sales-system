@@ -10,7 +10,7 @@ public class Stock {
     }
 
     public void addProduct (Product product, int quantity) {
-        products.put(product, products.getOrDefault(product, 0) + quantity);
+        products.put(product, quantity);
     }
 
     public void removeProduct (Product product, int quantity) {
