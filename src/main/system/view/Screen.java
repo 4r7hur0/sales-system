@@ -9,6 +9,10 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Screen extends Component implements Serializable {
     private SalesFacade facade = new SalesFacade();
@@ -295,10 +299,12 @@ public class Screen extends Component implements Serializable {
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
         JButton registerProduct = new JButton("Cadastrar produto");
+        JButton viewProducts = new JButton("Produtos à venda");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
         containerLeft.add(registerProduct);
+        containerLeft.add(viewProducts);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -321,6 +327,13 @@ public class Screen extends Component implements Serializable {
             }
         });
 
+        viewProducts.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewProducts();
+            }
+        });
+
         containerLeft.revalidate();
         containerLeft.repaint();
     }
@@ -334,13 +347,13 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
-        JButton seeProducts = new JButton("Produtos à venda");
+        JButton viewProducts = new JButton("Produtos à venda");
         JButton viewCart = new JButton("Carrinho");
         JButton viewOrders = new JButton("Pedidos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
-        containerLeft.add(seeProducts);
+        containerLeft.add(viewProducts);
         containerLeft.add(viewCart);
         containerLeft.add(viewOrders);
 
@@ -407,15 +420,15 @@ public class Screen extends Component implements Serializable {
                 try {
                     if (type == 1) {
                         facade.registerProduct("eletronic", descResField.getText(),
-                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
                     }
                     if (type == 2) {
-                        facade.registerProduct("clothes", descResField.getText(),
-                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                        facade.registerProduct("clothing", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
                     }
                     if (type == 3) {
                         facade.registerProduct("food", descResField.getText(),
-                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
                     }
                     JOptionPane.showMessageDialog(null, "Produto cadastrado!");
                 } catch (Exception ex) {
@@ -473,6 +486,43 @@ public class Screen extends Component implements Serializable {
                 registerProduct(3);
             }
         });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void viewProducts(){
+        HashMap<String, String> list = new HashMap();
+        list.put("teste1", "a1");
+        list.put("teste2", "a2");
+        list.put("teste3", "a3");
+
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(1, 1));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        JMenuBar menuBar = new JMenuBar();
+        JMenu todosUsuarios = new JMenu("Clique para listar todos os usuários cadastrados");
+
+        Iterator<Map.Entry<String, String>> iterator = list.entrySet().iterator();
+        while (iterator.hasNext()) {
+            String name = String.valueOf(iterator.next());
+            JMenuItem menuItem = new JMenuItem("Nome do usuário cadastrado: " + name);
+            todosUsuarios.add(menuItem);
+        }
+
+        menuBar.add(todosUsuarios);
+        center.add(menuBar);
 
         containerCenter.revalidate();
         containerCenter.repaint();

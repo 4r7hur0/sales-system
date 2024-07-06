@@ -1,6 +1,6 @@
 package main.system.model;
 
-public class ConcreteProductFactory {
+public class ConcreteProductFactory implements FactoryProduct {
     public Product makeProduct (String type, double price, String description) {
         switch (type.toLowerCase()) {
             case "eletronic":

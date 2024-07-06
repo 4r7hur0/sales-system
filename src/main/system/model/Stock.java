@@ -5,9 +5,7 @@ import java.util.HashMap;
 public class Stock {
     private Map<Product, Integer> products = new HashMap<>();
 
-    public Stock () {
-
-    }
+    public Stock () {}
 
     public void addProduct (Product product, int quantity) {
         products.put(product, quantity);

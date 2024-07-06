@@ -18,6 +18,7 @@ public class SalesFacade {
         return this.cb.loginUser(login , senha);
     }
 
-    public void registerProduct(String type, String description, double pryce, double qtd) {
+    public void registerProduct(String type, String description, double pryce, int qtd) {
+        this.cb.registerProduct(type, pryce, description, qtd);
     }
 }

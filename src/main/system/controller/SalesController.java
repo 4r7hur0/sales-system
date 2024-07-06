@@ -1,7 +1,9 @@
 package main.system.controller;
 
+import main.system.facade.SalesFacade;
 import main.system.model.Buyer;
 import main.system.model.Seller;
+import main.system.model.Stock;
 import main.system.model.User;
 
 import java.util.HashMap;
@@ -11,6 +13,7 @@ public class SalesController {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
     private User user; //usuário logado
+    private Stock stock = new Stock();
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
         if (payment != 0) {
@@ -32,5 +35,13 @@ public class SalesController {
         else
             throw new Exception("Login falhou");
         return u;
+    }
+
+    public void registerProduct(String type, double pryce, String description, int qtd) {
+        if (user instanceof Seller);
+        {
+            Seller seller = (Seller) user;
+            stock.addProduct(seller.registerProduct(type, pryce, description), qtd); //cria e adiciona ao estoque
+        }
     }
 }
