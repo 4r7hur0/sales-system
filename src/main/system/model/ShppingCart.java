@@ -46,6 +46,6 @@ public class ShppingCart {
     public Order checkout() {
         Order order = new Order(new LinkedList<>(items));
         items.clear();
-        return Order;
+        return order;
     }
 }
