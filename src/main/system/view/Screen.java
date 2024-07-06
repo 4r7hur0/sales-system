@@ -314,6 +314,13 @@ public class Screen extends Component implements Serializable {
             }
         });
 
+        registerProduct.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                selectType();
+            }
+        });
+
         containerLeft.revalidate();
         containerLeft.repaint();
     }
@@ -355,7 +362,8 @@ public class Screen extends Component implements Serializable {
         containerLeft.repaint();
     }
 
-    public void registerProduct() {
+    //1 = eletronico; 2 = roupa; 3 = comida
+    public void registerProduct(int type) {
         containerCenter.removeAll();
         containerCenter.revalidate();
 
@@ -372,31 +380,43 @@ public class Screen extends Component implements Serializable {
         containerCenter.add(new Label());
 
 
-        JLabel tipoLabel = new JLabel("Tipo:", SwingConstants.CENTER);
-        JTextField tipoField = new JTextField();
-        center.add(tipoLabel);
-        center.add(tipoField);
-
-        JLabel descResLabel = new JLabel("Descriçao resumida:", SwingConstants.CENTER);
+        JLabel descResLabel = new JLabel("Descriçao:", SwingConstants.CENTER);
         JTextField descResField = new JTextField();
         center.add(descResLabel);
         center.add(descResField);
 
-        JLabel descDetLabel = new JLabel("Descriçao detalhada:", SwingConstants.CENTER);
-        JTextField descDetField = new JTextField();
-        center.add(descDetLabel);
-        center.add(descDetField);
+        JLabel pryceLabel = new JLabel("Preço da unidade:", SwingConstants.CENTER);
+        JTextField pryceField = new JTextField();
+        center.add(pryceLabel);
+        center.add(pryceField);
+
+        JLabel qtdLabel = new JLabel("Quantidade:", SwingConstants.CENTER);
+        JTextField qtdField = new JTextField();
+        center.add(qtdLabel);
+        center.add(qtdField);
 
         JLabel enviarLabel = new JLabel();
         JButton enviarButton = new JButton("Enviar");
         center.add(enviarLabel);
         center.add(enviarButton);
 
+
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    //facade.cadastrarProduto(tipoField.getText(), descResField.getText(), descDetField.getText());
+                    if (type == 1) {
+                        facade.registerProduct("eletronic", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                    }
+                    if (type == 2) {
+                        facade.registerProduct("clothes", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                    }
+                    if (type == 3) {
+                        facade.registerProduct("food", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Double.parseDouble(qtdField.getText()));
+                    }
                     JOptionPane.showMessageDialog(null, "Produto cadastrado!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Informação incorreta sobre o produto!");
@@ -404,6 +424,53 @@ public class Screen extends Component implements Serializable {
                 containerCenter.removeAll();
                 containerCenter.revalidate();
                 containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void selectType() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 3, 10, 10));
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        JPanel center = new JPanel(new GridLayout(3, 1, 10, 10));
+        containerCenter.add(center);
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+
+        JButton btneletronic = new JButton("Cadastrar do tipo eletrônico");
+        JButton btnclothes = new JButton("Cadastrar do tipo roupa");
+        JButton btnfood = new JButton("Cadastrar do tipo comida");
+
+        center.add(btneletronic);
+        center.add(btnclothes);
+        center.add(btnfood);
+
+        btneletronic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(1);
+            }
+        });
+
+        btnclothes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(2);
+            }
+        });
+
+        btnfood.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(3);
             }
         });
 

@@ -17,4 +17,7 @@ public class SalesFacade {
     public User loginUser(String login, String senha) throws Exception {
         return this.cb.loginUser(login , senha);
     }
+
+    public void registerProduct(String type, String description, double pryce, double qtd) {
+    }
 }
