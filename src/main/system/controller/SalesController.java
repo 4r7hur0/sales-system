@@ -45,4 +45,8 @@ public class SalesController {
     public Map<Product, Integer> getAllProducts(){
         return this.stock.getAllProducts();
     }
+
+    public void removeProduct(Product product) {
+        this.stock.removeProduct(product, this.stock.getQuantity(product));
+    }
 }

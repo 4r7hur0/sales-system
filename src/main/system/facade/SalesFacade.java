@@ -28,4 +28,8 @@ public class SalesFacade {
     public Map<Product, Integer> getAllProducts(){
         return this.cb.getAllProducts();
     }
+
+    public void removeProduct(Product product) {
+        this.cb.removeProduct(product);
+    }
 }

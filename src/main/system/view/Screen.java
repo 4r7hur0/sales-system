@@ -9,9 +9,10 @@ import java.io.*;
 import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.border.Border;
-import javax.swing.border.EmptyBorder;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Screen extends Component implements Serializable {
     private SalesFacade facade = new SalesFacade();
@@ -516,12 +517,15 @@ public class Screen extends Component implements Serializable {
 
 
 
-        // Criando um DefaultTableModel para armazenar os dados da tabela
+        //criando um DefaultTableModel para armazenar os dados da tabela
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Categoria");
         tableModel.addColumn("Descrição");
         tableModel.addColumn("Preço");
         tableModel.addColumn("Quantidade");
+
+        //lista para armazenar os produtos correspondentes às linhas da tabela
+        List<Product> products = new ArrayList<>();
 
 
         for (Map.Entry<Product, Integer> entry : this.facade.getAllProducts().entrySet()) {
@@ -545,33 +549,50 @@ public class Screen extends Component implements Serializable {
             String quantity = String.valueOf(entry.getValue());
 
             tableModel.addRow(new Object[]{category, desc, pryce, quantity});
+            products.add(product);
         }
 
-
-        // Criando o JTable para exibir os dados
         JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        // Adicionando o JTable em um JScrollPane e depois ao container
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftSeller();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Product selectedProduct = products.get(selectedRow);
+
+                        containerLeft.add(new JLabel(""));
+                        JButton btnRemoveProduct = new JButton("Remover produto selecionado");
+                        containerLeft.add(btnRemoveProduct);
+
+                        btnRemoveProduct.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
+                                facade.removeProduct(selectedProduct);
+                                JOptionPane.showMessageDialog(null, "Produto removido!");
+
+                                viewProducts(); //atualizar a página
+                            }
+                        });
+
+                        containerLeft.repaint();
+                        containerLeft.revalidate();
+                    }
+                }
+            }
+        });
+
+        //adicionando o JTable em um JScrollPane e depois ao container
         JScrollPane scrollPane = new JScrollPane(table);
         containerCenter.add(scrollPane);
 
         containerCenter.revalidate();
         containerCenter.repaint();
-    }
-
-    //renderizador personalizado para configurar a borda dos elementos da jlist
-    static class CustomListCellRenderer extends DefaultListCellRenderer {
-        private static final Border BORDER = BorderFactory.createLineBorder(Color.BLACK, 1); // Borda preta de 1 pixel
-
-        @Override
-        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-            renderer.setBorder(BORDER);
-            renderer.setBorder(BorderFactory.createCompoundBorder(BORDER, new EmptyBorder(5, 10, 5, 10))); // Borda com margens internas
-            return renderer;
-        }
     }
 
 }
