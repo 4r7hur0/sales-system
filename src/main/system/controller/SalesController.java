@@ -1,13 +1,10 @@
 package main.system.controller;
 
-import main.system.facade.SalesFacade;
-import main.system.model.Buyer;
-import main.system.model.Seller;
-import main.system.model.Stock;
-import main.system.model.User;
+import main.system.model.*;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 public class SalesController {
     private HashMap<String, User> mapUsers = new HashMap<>();
@@ -41,7 +38,11 @@ public class SalesController {
         if (user instanceof Seller);
         {
             Seller seller = (Seller) user;
-            stock.addProduct(seller.registerProduct(type, pryce, description), qtd); //cria e adiciona ao estoque
+            this.stock.addProduct(seller.registerProduct(type, pryce, description), qtd); //cria e adiciona ao estoque
         }
+    }
+
+    public Map<Product, Integer> getAllProducts(){
+        return this.stock.getAllProducts();
     }
 }

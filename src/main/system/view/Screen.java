@@ -1,18 +1,17 @@
 package main.system.view;
 
 import main.system.facade.SalesFacade;
-import main.system.model.Seller;
-import main.system.model.User;
+import main.system.model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import javax.swing.border.Border;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class Screen extends Component implements Serializable {
     private SalesFacade facade = new SalesFacade();
@@ -74,9 +73,11 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
+        JButton view = new JButton("Produtos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
+        containerLeft.add(view);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -89,6 +90,13 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loginUser();
+            }
+        });
+
+        view.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewProducts();
             }
         });
     }
@@ -492,40 +500,78 @@ public class Screen extends Component implements Serializable {
     }
 
     public void viewProducts(){
-        HashMap<String, String> list = new HashMap();
-        list.put("teste1", "a1");
-        list.put("teste2", "a2");
-        list.put("teste3", "a3");
-
         containerCenter.removeAll();
-        containerCenter.revalidate();
+        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        JLabel labelCenter = new JLabel("Loja virtual", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
 
-        containerCenter.setLayout(new GridLayout(3, 3));
-        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
-        containerCenter.add(new Label());
-        containerCenter.add(new Label());
-        containerCenter.add(new Label());
-        Container center = new JPanel(new GridLayout(1, 1));
-        containerCenter.add(center);
-        containerCenter.add(new Label());
-        containerCenter.add(new Label());
-        containerCenter.add(new Label());
-        containerCenter.add(new Label());
-        JMenuBar menuBar = new JMenuBar();
-        JMenu todosUsuarios = new JMenu("Clique para listar todos os usuários cadastrados");
+        HashMap<String, String[]> list = new HashMap<>();
+        list.put("Categoria 1", new String[]{"Descrição 1", "10.0", "5"});
+        list.put("Categoria 2", new String[]{"Descrição 2", "20.0", "3"});
+        list.put("Categoria 3", new String[]{"Descrição 3", "15.0", "8"});
 
-        Iterator<Map.Entry<String, String>> iterator = list.entrySet().iterator();
-        while (iterator.hasNext()) {
-            String name = String.valueOf(iterator.next());
-            JMenuItem menuItem = new JMenuItem("Nome do usuário cadastrado: " + name);
-            todosUsuarios.add(menuItem);
+
+
+        // Criando um DefaultTableModel para armazenar os dados da tabela
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Descrição");
+        tableModel.addColumn("Preço");
+        tableModel.addColumn("Quantidade");
+
+
+        for (Map.Entry<Product, Integer> entry : this.facade.getAllProducts().entrySet()) {
+            String category = "";
+            String desc;
+            String pryce;
+
+            if (entry.getKey() instanceof Electronics) {
+                category = "Eletrônico";
+            }
+            if (entry.getKey() instanceof Clothes) {
+                category = "Roupa";
+            }
+            if (entry.getKey() instanceof Foods) {
+                category = "Comida";
+            }
+
+            Product product = entry.getKey();
+            desc = product.getDescription();
+            pryce = String.valueOf(product.getPrice());
+            String quantity = String.valueOf(entry.getValue());
+
+            tableModel.addRow(new Object[]{category, desc, pryce, quantity});
         }
 
-        menuBar.add(todosUsuarios);
-        center.add(menuBar);
+
+        // Criando o JTable para exibir os dados
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        // Adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
 
         containerCenter.revalidate();
         containerCenter.repaint();
+    }
+
+    //renderizador personalizado para configurar a borda dos elementos da jlist
+    static class CustomListCellRenderer extends DefaultListCellRenderer {
+        private static final Border BORDER = BorderFactory.createLineBorder(Color.BLACK, 1); // Borda preta de 1 pixel
+
+        @Override
+        public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            JLabel renderer = (JLabel) super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+            renderer.setBorder(BORDER);
+            renderer.setBorder(BorderFactory.createCompoundBorder(BORDER, new EmptyBorder(5, 10, 5, 10))); // Borda com margens internas
+            return renderer;
+        }
     }
 
 }

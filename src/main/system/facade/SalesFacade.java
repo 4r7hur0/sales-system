@@ -1,7 +1,10 @@
 package main.system.facade;
 
 import main.system.controller.SalesController;
+import main.system.model.Product;
 import main.system.model.User;
+
+import java.util.Map;
 
 public class SalesFacade {
     SalesController cb;
@@ -20,5 +23,9 @@ public class SalesFacade {
 
     public void registerProduct(String type, String description, double pryce, int qtd) {
         this.cb.registerProduct(type, pryce, description, qtd);
+    }
+
+    public Map<Product, Integer> getAllProducts(){
+        return this.cb.getAllProducts();
     }
 }

@@ -27,7 +27,7 @@ public class Stock {
         return products.getOrDefault(product, 0);
     }
 
-    public Map getAllProducts () {
+    public Map<Product, Integer> getAllProducts () {
         return products;
     }
 }
