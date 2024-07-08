@@ -32,4 +32,8 @@ public class SalesFacade {
     public void removeProduct(Product product) {
         this.cb.removeProduct(product);
     }
+
+    public void addInCart(Product product) {
+
+    }
 }
