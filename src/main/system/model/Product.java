@@ -1,7 +1,7 @@
 package main.system.model;
 
 public interface Product {
-    String getDescription();
-    String getType();
-    double getPrice();
+    public String getDescription();
+    public String getType();
+    public double getPrice();
 }
