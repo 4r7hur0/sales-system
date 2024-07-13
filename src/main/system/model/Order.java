@@ -1,16 +1,17 @@
 package main.system.model;
 import java.util.List;
+import java.util.Map;
 
 public class Order {
-    private List<Product> items;
+    private Map<Product, Integer> items;
     private OrderStatus status;
 
-    public Order(List<Product> items) {
+    public Order(Map<Product, Integer> items) {
         this.items = items;
         this.status = OrderStatus.NEW;
     }
 
-    public List<Product> getItems() {
+    public Map<Product, Integer> getItems() {
         return items;
     }
 

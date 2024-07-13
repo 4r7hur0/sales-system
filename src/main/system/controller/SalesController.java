@@ -49,4 +49,12 @@ public class SalesController {
     public void removeProduct(Product product) {
         this.stock.removeProduct(product, this.stock.getQuantity(product));
     }
+
+    public void addInCart(Product product) {
+        this.user.addInCart(product);
+    }
+
+    public Map<Product, Integer> viewCart() {
+        return this.user.viewCart();
+    }
 }

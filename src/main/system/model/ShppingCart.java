@@ -1,51 +1,39 @@
 package main.system.model;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShppingCart {
-    private List<Product> items = new LinkedList<>();
+    private Map<Product, Integer> items = new HashMap<>();
 
     public void addItem(Product item) {
-        ProductPackage existingPackage = null;
-
-        for(Product existingItem: items) {
-            if(existingItem instanceof ProductPackage) {
-                ProductPackage productPackage = (ProductPackage) existingItem;
-                existingPackage = productPackage;
-                break;
-            }
-            else if(existingItem.getDescription().equals(item.getDescription())) {
-                existingItem = new ProductPackage(item.getDescription());
-                existingPackage.addProduct(existingItem);
-                items.remove(existingItem);
-                items.add(existingPackage);
-                break;
-            }
-        }
-        if(existingPackage != null) {
-            existingPackage.addProduct(item);
-        }
-        else {
-            items.add(item);
-        }
+        items.put(item, items.getOrDefault(item, 0) + 1);
     }
 
     public void removeItem(Product item) {
-        items.remove(item);
+        if (items.containsKey(item)) {
+            int currentQuantity = items.get(item);
+            if (currentQuantity > 1) {
+                items.put(item, currentQuantity - 1);
+            } else {
+                items.remove(item);
+            }
+        }
     }
 
     public double getTotalPrice() {
-        return items.stream().mapToDouble(Product::getPrice).sum();
+        return items.entrySet().stream()
+                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue()).sum();
     }
 
-    public List<Product> getItems() {
+    public Map<Product, Integer> getItems() {
         return items;
     }
 
     public Order checkout() {
-        Order order = new Order(new LinkedList<>(items));
+        Order order = new Order(new HashMap<>(items));
         items.clear();
         return order;
     }
 }
+

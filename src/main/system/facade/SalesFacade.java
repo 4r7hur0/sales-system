@@ -4,6 +4,7 @@ import main.system.controller.SalesController;
 import main.system.model.Product;
 import main.system.model.User;
 
+import java.util.LinkedList;
 import java.util.Map;
 
 public class SalesFacade {
@@ -34,6 +35,10 @@ public class SalesFacade {
     }
 
     public void addInCart(Product product) {
+        this.cb.addInCart(product);
+    }
 
+    public Map<Product, Integer> viewCart() {
+        return this.cb.viewCart();
     }
 }
