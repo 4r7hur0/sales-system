@@ -31,7 +31,7 @@ public class ShppingCart {
     }
 
     public Order checkout() {
-        Order order = new Order(new HashMap<>(items));
+        Order order = new Order(new HashMap<>(items), PaymentMethod paymentMethod);
         items.clear();
         return order;
     }
