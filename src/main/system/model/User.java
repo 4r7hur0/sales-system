@@ -1,5 +1,6 @@
 package main.system.model;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,10 @@ public abstract class User {
         return this.password;
     }
 
+    public String getName(){
+        return this.login;
+    }
+
     public void addInCart(Product product) {
         cart.addItem(product);
     }
@@ -35,4 +40,11 @@ public abstract class User {
         return cart.getItems();
     }
 
+    public double getTotalPrice() {
+        return this.cart.getTotalPrice();
+    }
+
+    public ShppingCart getCart(){
+        return this.cart;
+    }
 }

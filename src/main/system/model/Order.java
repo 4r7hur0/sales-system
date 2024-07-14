@@ -1,17 +1,22 @@
 package main.system.model;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Order {
-    private Map<Product, Integer> items;
+    private Map<Product, OrderStatus> items;
     private OrderStatus status;
 
-    public Order(Map<Product, Integer> items) {
-        this.items = items;
-        this.status = OrderStatus.NEW;
+    public Order() {
+        this.items = new HashMap<>();
     }
 
-    public Map<Product, Integer> getItems() {
+    public void setOrder(Map<Product, Integer> items) {
+        for (Map.Entry<Product, Integer> entry : items.entrySet()) {
+            this.items.put(entry.getKey(), OrderStatus.NEW);
+        }
+    }
+
+    public Map<Product, OrderStatus> getItems() {
         return items;
     }
 
@@ -22,6 +27,7 @@ public class Order {
     public void setShipped() {
         this.status = OrderStatus.SHIPPED;
     }
+
     public enum OrderStatus {
         NEW, SHIPPED;
     }

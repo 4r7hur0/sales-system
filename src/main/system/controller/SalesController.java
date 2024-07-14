@@ -34,6 +34,10 @@ public class SalesController {
         return u;
     }
 
+    public String getNameUser(){
+        return this.user.getName();
+    }
+
     public void registerProduct(String type, double pryce, String description, int qtd) {
         if (user instanceof Seller);
         {
@@ -56,5 +60,17 @@ public class SalesController {
 
     public Map<Product, Integer> viewCart() {
         return this.user.viewCart();
+    }
+
+    public double getTotalPrice() {
+        return this.user.getTotalPrice();
+    }
+
+    public void order() {
+        this.user.getCart().checkout();
+    }
+
+    public Map<Product, Order.OrderStatus> viewOrder() {
+        return this.user.getCart().getOrder().getItems();
     }
 }

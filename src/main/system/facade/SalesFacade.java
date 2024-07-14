@@ -1,9 +1,11 @@
 package main.system.facade;
 
 import main.system.controller.SalesController;
+import main.system.model.Order;
 import main.system.model.Product;
 import main.system.model.User;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -20,6 +22,10 @@ public class SalesFacade {
 
     public User loginUser(String login, String senha) throws Exception {
         return this.cb.loginUser(login , senha);
+    }
+
+    public String getNameUser(){
+        return this.cb.getNameUser();
     }
 
     public void registerProduct(String type, String description, double pryce, int qtd) {
@@ -40,5 +46,16 @@ public class SalesFacade {
 
     public Map<Product, Integer> viewCart() {
         return this.cb.viewCart();
+    }
+    public double getTotalPrice() {
+        return this.cb.getTotalPrice();
+    }
+
+    public void order(){
+        this.cb.order();
+    }
+
+    public Map<Product, Order.OrderStatus> viewOrder(){
+        return this.cb.viewOrder();
     }
 }

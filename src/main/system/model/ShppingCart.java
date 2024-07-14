@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ShppingCart {
     private Map<Product, Integer> items = new HashMap<>();
+    Order order = new Order();
 
     public void addItem(Product item) {
         items.put(item, items.getOrDefault(item, 0) + 1);
@@ -31,9 +32,13 @@ public class ShppingCart {
     }
 
     public Order checkout() {
-        Order order = new Order(new HashMap<>(items));
+        order.setOrder(items);
         items.clear();
         return order;
+    }
+
+    public Order getOrder(){
+        return this.order;
     }
 }
 
