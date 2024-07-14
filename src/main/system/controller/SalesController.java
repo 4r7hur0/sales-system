@@ -70,7 +70,4 @@ public class SalesController {
         this.user.getCart().checkout();
     }
 
-    public Map<Product, Order.OrderStatus> viewOrder() {
-        return this.user.getCart().getOrder().getItems();
-    }
 }

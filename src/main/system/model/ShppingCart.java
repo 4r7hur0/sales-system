@@ -5,6 +5,7 @@ import java.util.Map;
 
 public class ShppingCart {
     private Map<Product, Integer> items = new HashMap<>();
+    private PayPalMethod payment;
 
     public void addItem(Product item) {
         items.put(item, items.getOrDefault(item, 0) + 1);
@@ -31,9 +32,13 @@ public class ShppingCart {
     }
 
     public Order checkout() {
-        Order order = new Order(new HashMap<>(items), PaymentMethod paymentMethod);
+        Order order = new Order(new HashMap<>(items), payment); //Passar método de pagamento na finalização do pedido.
         items.clear();
         return order;
+    }
+
+    public void setPaymentMethod(PayPalMethod payment){
+        this.payment = payment;
     }
 }
 
