@@ -1,11 +1,10 @@
 package main.system.facade;
 
 import main.system.controller.SalesController;
-import main.system.model.Order;
-import main.system.model.Product;
-import main.system.model.User;
+import main.system.model.*;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -55,7 +54,19 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public Map<Product, Order.OrderStatus> viewOrder(){
+    public Iterator<Order> viewOrder(){
         return this.cb.viewOrder();
+    }
+
+    public PaymentMethod credit(String num, String name, String cvv) {
+        return this.cb.credit(num, name, cvv);
+    }
+
+    public PaymentMethod payPal(String email) {
+        return this.cb.payPal(email);
+    }
+
+    public PaymentMethod bankTransfer(String num, String ag, String name) {
+        return this.cb.bankTransfer(num, name, ag);
     }
 }

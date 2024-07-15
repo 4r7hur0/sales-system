@@ -1,9 +1,6 @@
 package main.system.model;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public abstract class User {
     private String name;
@@ -11,17 +8,15 @@ public abstract class User {
     private String password;
     private String email;
     private String address;
-    private int payment; //forma de pagamento - 1 cartão de credito; 2 PayPal; 3 transferência bancâria
-    //se for diferente disso, então o usuário é um vendedor
     private ShppingCart cart = new ShppingCart();
+    private LinkedList<Order> orders = new LinkedList<>();
 
-    public User (String name, String login, String password, String email, String address, int payment) {
+    public User (String name, String login, String password, String email, String address) {
         this.name = name;
         this.login = login;
         this.password = password;
         this.email = email;
         this.address = address;
-        this.payment = payment;
     }
 
     public String getPassword(){
@@ -46,5 +41,13 @@ public abstract class User {
 
     public ShppingCart getCart(){
         return this.cart;
+    }
+
+    public void addOrder(Order order) {
+        this.orders.add(order);
+    }
+
+    public Iterator<Order> getOrders(){
+        return this.orders.iterator();
     }
 }
