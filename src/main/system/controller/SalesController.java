@@ -95,4 +95,16 @@ public class SalesController {
         this.user.getCart().setPaymentMethod(payment);
         return payment;
     }
+
+    public void modifyStatus(Order order) {
+        order.setShipped();
+    }
+
+    public Iterator<Order> viewAllOrders() {
+        return this.allOrders.iterator();
+    }
+
+    public void removeProductCart(Product product){
+        this.user.getCart().removeItem(product);
+    }
 }

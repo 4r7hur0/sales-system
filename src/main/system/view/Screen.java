@@ -74,11 +74,9 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
-        JButton view = new JButton("Produtos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
-        containerLeft.add(view);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -94,12 +92,6 @@ public class Screen extends Component implements Serializable {
             }
         });
 
-        view.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewProductsBuyer();
-            }
-        });
     }
 
     public void registerUser() {
@@ -291,7 +283,7 @@ public class Screen extends Component implements Serializable {
 
     public void buttonsLeftSeller(){
         containerLeft.removeAll();
-        containerLeft.add(new JLabel("Vendedor: " + facade.getNameUser()), JLabel.CENTER);
+        containerLeft.add(new JLabel("Vendedor: " + facade.getNameUser(), JLabel.CENTER));
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -301,11 +293,13 @@ public class Screen extends Component implements Serializable {
         JButton loginUser = new JButton("Fazer login");
         JButton registerProduct = new JButton("Cadastrar produto");
         JButton viewProducts = new JButton("Produtos à venda");
+        JButton productsSold = new JButton("Produtos vendidos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
         containerLeft.add(registerProduct);
         containerLeft.add(viewProducts);
+        containerLeft.add(productsSold);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -339,13 +333,21 @@ public class Screen extends Component implements Serializable {
             }
         });
 
+        productsSold.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
+                productsSold();
+            }
+        });
+
         containerLeft.revalidate();
         containerLeft.repaint();
     }
 
     public void buttonsLeftBuyer() {
         containerLeft.removeAll();
-        containerLeft.add(new JLabel("Comprador: " + facade.getNameUser()), JLabel.CENTER);
+        containerLeft.add(new JLabel("Comprador: " + facade.getNameUser(), JLabel.CENTER));
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -398,6 +400,7 @@ public class Screen extends Component implements Serializable {
         viewOrders.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
                 viewOrder();
             }
         });
@@ -461,7 +464,6 @@ public class Screen extends Component implements Serializable {
                         facade.registerProduct("food", descResField.getText(),
                                 Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
                     }
-                    JOptionPane.showMessageDialog(null, "Produto cadastrado!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Informação incorreta sobre o produto!");
                 }
@@ -589,7 +591,6 @@ public class Screen extends Component implements Serializable {
                             public void actionPerformed(ActionEvent e) {
                                 //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
                                 facade.removeProduct(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto removido!");
 
                                 viewProductsSeller(); //atualizar a página
                             }
@@ -675,9 +676,7 @@ public class Screen extends Component implements Serializable {
                         btnaddProduct.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
                                 facade.addInCart(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto adicionado ao carrinho!");
 
                                 viewProductsBuyer(); //atualizar a página
                             }
@@ -770,9 +769,7 @@ public class Screen extends Component implements Serializable {
                         btnRemoveProduct.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
-                                //facade.removeProduct(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto removido!");
+                                facade.removeProductCart(selectedProduct);
                                 viewCart(); //atualizar a página
                             }
                         });
@@ -1069,6 +1066,67 @@ public class Screen extends Component implements Serializable {
                 containerCenter.repaint();
             }
         });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void productsSold() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1));
+        JLabel labelCenter = new JLabel("Produtos vendidos", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Preço Total");
+        tableModel.addColumn("Quantidade");
+        tableModel.addColumn("Status");
+        tableModel.addColumn("Ação");
+
+        List<Order> orders = new ArrayList<>();
+
+        Iterator<Order> iterator = this.facade.viewAllOrders();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            Order.OrderStatus status = order.getStatus();
+
+            double totalPrice = 0;
+            int totalQuantity = 0;
+
+            for (Map.Entry<Product, Integer> entry : order.getItems().entrySet()) {
+                totalPrice += entry.getKey().getPrice() * entry.getValue();
+                totalQuantity += entry.getValue();
+            }
+
+            tableModel.addRow(new Object[]{totalPrice, totalQuantity, status, "Clique para alterar os status"});
+            orders.add(order);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftSeller();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Order selectedOrder = orders.get(selectedRow);
+                        facade.modifyStatus(selectedOrder);
+                        productsSold();
+                    }
+                }
+            }
+        });
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
 
         containerCenter.revalidate();
         containerCenter.repaint();

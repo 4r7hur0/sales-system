@@ -69,4 +69,16 @@ public class SalesFacade {
     public PaymentMethod bankTransfer(String num, String ag, String name) {
         return this.cb.bankTransfer(num, name, ag);
     }
+
+    public Iterator<Order> viewAllOrders() {
+        return this.cb.viewAllOrders();
+    }
+
+    public void modifyStatus(Order order) {
+        this.cb.modifyStatus(order);
+    }
+
+    public void removeProductCart(Product product){
+        this.cb.removeProductCart(product);
+    }
 }
