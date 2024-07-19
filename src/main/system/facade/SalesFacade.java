@@ -55,7 +55,7 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public Map<Product, Order.OrderStatus> viewOrder(){
-        return this.cb.viewOrder();
-    }
+//    public Map<Product, Order.OrderStatus> viewOrder(){
+//        return this.cb.viewOrder();
+//    }
 }

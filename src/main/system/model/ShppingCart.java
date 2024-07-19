@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class ShppingCart {
     private Map<Product, Integer> items = new HashMap<>();
-    private PayPalMethod payment;
+    private PaymentMethod payment;
 
     public void addItem(Product item) {
         items.put(item, items.getOrDefault(item, 0) + 1);
