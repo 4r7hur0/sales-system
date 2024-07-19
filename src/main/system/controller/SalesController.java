@@ -1,6 +1,8 @@
 package main.system.controller;
 
 import main.system.model.*;
+import main.system.model.exception.InsufficientQuantityException;
+import main.system.model.exception.InvalidProductException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -38,11 +40,20 @@ public class SalesController {
         return this.user.getName();
     }
 
-    public void registerProduct(String type, double pryce, String description, int qtd) {
+    public void registerProduct(String type, double price, String description, int qtd) throws InvalidProductException {
         if (user instanceof Seller);
         {
             Seller seller = (Seller) user;
-            this.stock.addProduct(seller.registerProduct(type, pryce, description), qtd); //cria e adiciona ao estoque
+
+            if (price <= 0) {
+                throw new InvalidProductException();
+            }
+
+            if (description == null) {
+                throw new InvalidProductException();
+            }
+
+            this.stock.addProduct(seller.registerProduct(type, price, description), qtd); //cria e adiciona ao estoque
         }
     }
 
@@ -50,7 +61,12 @@ public class SalesController {
         return this.stock.getAllProducts();
     }
 
-    public void removeProduct(Product product) {
+    public void removeProduct(Product product) throws InsufficientQuantityException {
+        int quantity = this.stock.getQuantity(product);
+        if (quantity < quantity) {
+            throw new InsufficientQuantityException();
+        }
+
         this.stock.removeProduct(product, this.stock.getQuantity(product));
     }
 

@@ -4,6 +4,8 @@ import main.system.controller.SalesController;
 import main.system.model.Order;
 import main.system.model.Product;
 import main.system.model.User;
+import main.system.model.exception.InsufficientQuantityException;
+import main.system.model.exception.InvalidProductException;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -28,7 +30,7 @@ public class SalesFacade {
         return this.cb.getNameUser();
     }
 
-    public void registerProduct(String type, String description, double pryce, int qtd) {
+    public void registerProduct(String type, String description, double pryce, int qtd) throws InvalidProductException {
         this.cb.registerProduct(type, pryce, description, qtd);
     }
 
@@ -36,7 +38,7 @@ public class SalesFacade {
         return this.cb.getAllProducts();
     }
 
-    public void removeProduct(Product product) {
+    public void removeProduct(Product product) throws InsufficientQuantityException {
         this.cb.removeProduct(product);
     }
 
