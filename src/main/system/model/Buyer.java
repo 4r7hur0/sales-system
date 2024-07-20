@@ -5,4 +5,7 @@ public class Buyer extends User {
         super(name, login, password, email, address);
     }
 
+    public double getTotalPrice() {
+        return this.getCart().getTotalPrice();
+    }
 }

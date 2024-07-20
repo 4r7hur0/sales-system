@@ -8,6 +8,11 @@ public class Seller extends User {
        super(name, login, password, email, address);
     }
 
+    @Override
+    public double getTotalPrice() {
+        return 0; //Vendedor não possui carrinho
+    }
+
     public Product registerProduct(String type, double price, String description){
         return factoryProduct.makeProduct(type, price, description);
     }

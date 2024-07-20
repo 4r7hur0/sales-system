@@ -23,8 +23,13 @@ public class ShppingCart {
     }
 
     public double getTotalPrice() {
-        return items.entrySet().stream()
-                .mapToDouble(entry -> entry.getKey().getPrice() * entry.getValue()).sum();
+        double totalPrice = 0.0;
+        for (Map.Entry<Product, Integer> p : items.entrySet()) {
+            Product product = p.getKey();
+            int quantity = p.getValue();
+            totalPrice += product.getPrice() * quantity;
+        }
+        return totalPrice;
     }
 
     public Map<Product, Integer> getItems() {

@@ -41,10 +41,12 @@ public class SalesController {
     }
 
     public void registerProduct(String type, double pryce, String description, int qtd) {
+        StockInterface stockProxy = new StockProxy(this.stock, this.user);
         if (user instanceof Seller);
         {
             Seller seller = (Seller) user;
-            this.stock.addProduct(seller.registerProduct(type, pryce, description), qtd); //cria e adiciona ao estoque
+            Product product = seller.registerProduct(type, pryce, description);
+            stockProxy.addProduct(product, qtd);
         }
     }
 
@@ -52,8 +54,10 @@ public class SalesController {
         return this.stock.getAllProducts();
     }
 
+    //método para remover do estoque
     public void removeProduct(Product product) {
-        this.stock.removeProduct(product, this.stock.getQuantity(product));
+        StockInterface stockProxy = new StockProxy(this.stock, this.user);
+        stockProxy.removeProduct(product, this.stock.getQuantity(product));;
     }
 
     public void addInCart(Product product) {
@@ -97,7 +101,7 @@ public class SalesController {
     }
 
     public void modifyStatus(Order order) {
-        order.setShipped();
+        order.nextStatus();
     }
 
     public Iterator<Order> viewAllOrders() {

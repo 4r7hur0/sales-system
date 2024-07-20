@@ -35,9 +35,7 @@ public abstract class User {
         return cart.getItems();
     }
 
-    public double getTotalPrice() {
-        return this.cart.getTotalPrice();
-    }
+    public abstract double getTotalPrice();
 
     public ShppingCart getCart(){
         return this.cart;

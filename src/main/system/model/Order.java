@@ -4,12 +4,12 @@ import java.util.Map;
 
 public class Order {
     private Map<Product, Integer> items;
-    private OrderStatus status;
+    private OrderState status;
     private PaymentMethod paymentMethod;
 
     public Order(Map<Product, Integer> items, PaymentMethod paymentMethod) {
         this.items = items;
-        this.status = OrderStatus.NEW;
+        this.status = new CreatingOrderState();
         this.paymentMethod = paymentMethod;
     }
 
@@ -17,15 +17,20 @@ public class Order {
         return items;
     }
 
-    public OrderStatus getStatus() {
+    public OrderState getStatus() {
         return status;
     }
 
-    public void setShipped() {
-        this.status = OrderStatus.SHIPPED;
+    public void setStatus(OrderState status) {
+        this.status = status;
     }
-    public enum OrderStatus {
-        NEW, SHIPPED;
+
+    public void nextStatus() {
+        status.next(this);
+    }
+
+    public String getStateOrder(){
+        return status.status(); //irá retornar o método status que está no estado do pedido
     }
 
     public PaymentMethod getPaymentMethod() {

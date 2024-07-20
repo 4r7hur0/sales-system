@@ -830,7 +830,7 @@ public class Screen extends Component implements Serializable {
         Iterator<Order> iterator = this.facade.viewOrder();
         while (iterator.hasNext()) {
             Order order = iterator.next();
-            Order.OrderStatus status = order.getStatus();
+            String status = order.getStateOrder();
 
             for (Map.Entry<Product, Integer> entry : order.getItems().entrySet()) {
                 String category = "";
@@ -1092,7 +1092,7 @@ public class Screen extends Component implements Serializable {
         Iterator<Order> iterator = this.facade.viewAllOrders();
         while (iterator.hasNext()) {
             Order order = iterator.next();
-            Order.OrderStatus status = order.getStatus();
+            String status = order.getStateOrder();
 
             double totalPrice = 0;
             int totalQuantity = 0;

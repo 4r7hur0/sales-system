@@ -2,15 +2,17 @@ package main.system.model;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Stock {
+public class Stock implements StockInterface{
     private Map<Product, Integer> products = new HashMap<>();
 
     public Stock () {}
 
+    @Override
     public void addProduct (Product product, int quantity) {
         products.put(product, quantity);
     }
 
+    @Override
     public void removeProduct (Product product, int quantity) {
         if (products.containsKey(product)) {
             int currentQuantity = products.get(product);
@@ -21,6 +23,11 @@ public class Stock {
                 }
             }
         }
+    }
+
+    @Override
+    public boolean checkAcess() {
+        return false;
     }
 
     public int getQuantity (Product product) {
