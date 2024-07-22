@@ -1,7 +1,6 @@
 package main.system.facade;
 
 import main.system.controller.SalesController;
- dev
 import main.system.model.*;
 
 import main.system.model.Order;
@@ -9,7 +8,6 @@ import main.system.model.Product;
 import main.system.model.User;
 import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
- master
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -62,7 +60,6 @@ public class SalesFacade {
         this.cb.order();
     }
 
- dev
     public Iterator<Order> viewOrder(){
         return this.cb.viewOrder();
     }
@@ -94,5 +91,4 @@ public class SalesFacade {
 //    public Map<Product, Order.OrderStatus> viewOrder(){
 //        return this.cb.viewOrder();
 //    }
- master
 }

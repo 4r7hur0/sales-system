@@ -42,21 +42,13 @@ public class SalesController {
         return this.user.getName();
     }
 
- dev
     public void registerProduct(String type, double pryce, String description, int qtd) {
         StockInterface stockProxy = new StockProxy(this.stock, this.user);
-        if (user instanceof Seller);
+        if (user instanceof Seller) ;
         {
             Seller seller = (Seller) user;
             Product product = seller.registerProduct(type, pryce, description);
             stockProxy.addProduct(product, qtd);
-
-    public void registerProduct(String type, double price, String description, int qtd) {
-        if (user instanceof Seller);
-        {
-            Seller seller = (Seller) user;
-            this.stock.addProduct(seller.registerProduct(type, price, description), qtd); //cria e adiciona ao estoque
- master
         }
     }
 

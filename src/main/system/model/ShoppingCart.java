@@ -3,7 +3,7 @@ package main.system.model;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShppingCart {
+public class ShoppingCart {
     private Map<Product, Integer> items = new HashMap<>();
     private PaymentMethod payment;
 
