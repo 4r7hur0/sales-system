@@ -5,6 +5,4 @@ public class Buyer extends User {
         super(name, login, password, email, address, payment);
     }
 
-    @Override
-    public void registerProduct(){}
 }

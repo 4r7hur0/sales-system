@@ -1,14 +1,18 @@
 package main.system.view;
 
 import main.system.facade.SalesFacade;
-import main.system.model.Seller;
-import main.system.model.User;
+import main.system.model.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.*;
+import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.*;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 public class Screen extends Component implements Serializable {
     private SalesFacade facade = new SalesFacade();
@@ -70,9 +74,11 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
+        JButton view = new JButton("Produtos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
+        containerLeft.add(view);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -85,6 +91,13 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 loginUser();
+            }
+        });
+
+        view.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewProductsBuyer();
             }
         });
     }
@@ -287,6 +300,7 @@ public class Screen extends Component implements Serializable {
 
     public void buttonsLeftSeller(){
         containerLeft.removeAll();
+        containerLeft.add(new JLabel("Vendedor: " + facade.getNameUser()), JLabel.CENTER);
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -295,14 +309,17 @@ public class Screen extends Component implements Serializable {
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
         JButton registerProduct = new JButton("Cadastrar produto");
+        JButton viewProducts = new JButton("Produtos à venda");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
         containerLeft.add(registerProduct);
+        containerLeft.add(viewProducts);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
                 registerUser();
             }
         });
@@ -310,7 +327,24 @@ public class Screen extends Component implements Serializable {
         loginUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
                 loginUser();
+            }
+        });
+
+        registerProduct.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
+                selectType();
+            }
+        });
+
+        viewProducts.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
+                viewProductsSeller();
             }
         });
 
@@ -320,6 +354,7 @@ public class Screen extends Component implements Serializable {
 
     public void buttonsLeftBuyer() {
         containerLeft.removeAll();
+        containerLeft.add(new JLabel("Comprador: " + facade.getNameUser()), JLabel.CENTER);
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -327,19 +362,20 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
-        JButton seeProducts = new JButton("Produtos à venda");
+        JButton viewProducts = new JButton("Produtos à venda");
         JButton viewCart = new JButton("Carrinho");
         JButton viewOrders = new JButton("Pedidos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
-        containerLeft.add(seeProducts);
+        containerLeft.add(viewProducts);
         containerLeft.add(viewCart);
         containerLeft.add(viewOrders);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
                 registerUser();
             }
         });
@@ -347,7 +383,31 @@ public class Screen extends Component implements Serializable {
         loginUser.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
                 loginUser();
+            }
+        });
+
+        viewProducts.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
+                viewProductsBuyer();
+            }
+        });
+
+        viewCart.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
+                viewCart();
+            }
+        });
+
+        viewOrders.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                viewOrder();
             }
         });
 
@@ -355,7 +415,8 @@ public class Screen extends Component implements Serializable {
         containerLeft.repaint();
     }
 
-    public void registerProduct() {
+    //1 = eletronico; 2 = roupa; 3 = comida
+    public void registerProduct(int type) {
         containerCenter.removeAll();
         containerCenter.revalidate();
 
@@ -372,31 +433,43 @@ public class Screen extends Component implements Serializable {
         containerCenter.add(new Label());
 
 
-        JLabel tipoLabel = new JLabel("Tipo:", SwingConstants.CENTER);
-        JTextField tipoField = new JTextField();
-        center.add(tipoLabel);
-        center.add(tipoField);
-
-        JLabel descResLabel = new JLabel("Descriçao resumida:", SwingConstants.CENTER);
+        JLabel descResLabel = new JLabel("Descriçao:", SwingConstants.CENTER);
         JTextField descResField = new JTextField();
         center.add(descResLabel);
         center.add(descResField);
 
-        JLabel descDetLabel = new JLabel("Descriçao detalhada:", SwingConstants.CENTER);
-        JTextField descDetField = new JTextField();
-        center.add(descDetLabel);
-        center.add(descDetField);
+        JLabel pryceLabel = new JLabel("Preço da unidade:", SwingConstants.CENTER);
+        JTextField pryceField = new JTextField();
+        center.add(pryceLabel);
+        center.add(pryceField);
+
+        JLabel qtdLabel = new JLabel("Quantidade:", SwingConstants.CENTER);
+        JTextField qtdField = new JTextField();
+        center.add(qtdLabel);
+        center.add(qtdField);
 
         JLabel enviarLabel = new JLabel();
         JButton enviarButton = new JButton("Enviar");
         center.add(enviarLabel);
         center.add(enviarButton);
 
+
         enviarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {
-                    //facade.cadastrarProduto(tipoField.getText(), descResField.getText(), descDetField.getText());
+                    if (type == 1) {
+                        facade.registerProduct("eletronic", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
+                    }
+                    if (type == 2) {
+                        facade.registerProduct("clothing", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
+                    }
+                    if (type == 3) {
+                        facade.registerProduct("food", descResField.getText(),
+                                Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
+                    }
                     JOptionPane.showMessageDialog(null, "Produto cadastrado!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Informação incorreta sobre o produto!");
@@ -406,6 +479,407 @@ public class Screen extends Component implements Serializable {
                 containerCenter.repaint();
             }
         });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void selectType() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 3, 10, 10));
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        JPanel center = new JPanel(new GridLayout(3, 1, 10, 10));
+        containerCenter.add(center);
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+
+        JButton btneletronic = new JButton("Cadastrar do tipo eletrônico");
+        JButton btnclothes = new JButton("Cadastrar do tipo roupa");
+        JButton btnfood = new JButton("Cadastrar do tipo comida");
+
+        center.add(btneletronic);
+        center.add(btnclothes);
+        center.add(btnfood);
+
+        btneletronic.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(1);
+            }
+        });
+
+        btnclothes.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(2);
+            }
+        });
+
+        btnfood.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                registerProduct(3);
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void viewProductsSeller(){
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        JLabel labelCenter = new JLabel("Produtos à venda", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        //criando um DefaultTableModel para armazenar os dados da tabela
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Descrição");
+        tableModel.addColumn("Preço");
+        tableModel.addColumn("Quantidade");
+
+        //lista para armazenar os produtos correspondentes às linhas da tabela
+        List<Product> products = new ArrayList<>();
+
+
+        for (Map.Entry<Product, Integer> entry : this.facade.getAllProducts().entrySet()) {
+            String category = "";
+            String desc;
+            String pryce;
+
+            if (entry.getKey() instanceof Electronics) {
+                category = "Eletrônico";
+            }
+            if (entry.getKey() instanceof Clothes) {
+                category = "Roupa";
+            }
+            if (entry.getKey() instanceof Foods) {
+                category = "Comida";
+            }
+
+            Product product = entry.getKey();
+            desc = product.getDescription();
+            pryce = String.valueOf(product.getPrice());
+            String quantity = String.valueOf(entry.getValue());
+
+            tableModel.addRow(new Object[]{category, desc, pryce, quantity});
+            products.add(product);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftSeller();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Product selectedProduct = products.get(selectedRow);
+
+                        containerLeft.add(new JLabel(""));
+                        JButton btnRemoveProduct = new JButton("Remover produto selecionado");
+                        containerLeft.add(btnRemoveProduct);
+
+                        btnRemoveProduct.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
+                                facade.removeProduct(selectedProduct);
+                                JOptionPane.showMessageDialog(null, "Produto removido!");
+
+                                viewProductsSeller(); //atualizar a página
+                            }
+                        });
+
+                        containerLeft.repaint();
+                        containerLeft.revalidate();
+                    }
+                }
+            }
+        });
+
+        //adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void viewProductsBuyer(){
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        JLabel labelCenter = new JLabel("Produtos à venda", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        //criando um DefaultTableModel para armazenar os dados da tabela
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Descrição");
+        tableModel.addColumn("Preço");
+        tableModel.addColumn("Quantidade");
+
+        //lista para armazenar os produtos correspondentes às linhas da tabela
+        List<Product> products = new ArrayList<>();
+
+
+        for (Map.Entry<Product, Integer> entry : this.facade.getAllProducts().entrySet()) {
+            String category = "";
+            String desc;
+            String pryce;
+
+            if (entry.getKey() instanceof Electronics) {
+                category = "Eletrônico";
+            }
+            if (entry.getKey() instanceof Clothes) {
+                category = "Roupa";
+            }
+            if (entry.getKey() instanceof Foods) {
+                category = "Comida";
+            }
+
+            Product product = entry.getKey();
+            desc = product.getDescription();
+            pryce = String.valueOf(product.getPrice());
+            String quantity = String.valueOf(entry.getValue());
+
+            tableModel.addRow(new Object[]{category, desc, pryce, quantity});
+            products.add(product);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftBuyer();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Product selectedProduct = products.get(selectedRow);
+
+                        containerLeft.add(new JLabel(""));
+                        JButton btnaddProduct = new JButton("Adicionar ao carrinho");
+                        containerLeft.add(btnaddProduct);
+
+                        btnaddProduct.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
+                                facade.addInCart(selectedProduct);
+                                JOptionPane.showMessageDialog(null, "Produto adicionado ao carrinho!");
+
+                                viewProductsBuyer(); //atualizar a página
+                            }
+                        });
+
+                        containerLeft.repaint();
+                        containerLeft.revalidate();
+                    }
+                }
+            }
+        });
+
+        //adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void viewCart(){
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        JLabel labelCenter = new JLabel("Carrinho", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        HashMap<String, String[]> list = new HashMap<>();
+        list.put("Categoria 1", new String[]{"Descrição 1", "10.0", "5"});
+        list.put("Categoria 2", new String[]{"Descrição 2", "20.0", "3"});
+        list.put("Categoria 3", new String[]{"Descrição 3", "15.0", "8"});
+
+
+
+        //criando um DefaultTableModel para armazenar os dados da tabela
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Descrição");
+        tableModel.addColumn("Preço");
+        tableModel.addColumn("Quantidade");
+
+        //lista para armazenar os produtos correspondentes às linhas da tabela
+        List<Product> products = new ArrayList<>();
+
+
+        for (Map.Entry<Product, Integer> entry : this.facade.viewCart().entrySet()) {
+            String category = "";
+            String desc;
+            String pryce;
+
+            if (entry.getKey() instanceof Electronics) {
+                category = "Eletrônico";
+            }
+            if (entry.getKey() instanceof Clothes) {
+                category = "Roupa";
+            }
+            if (entry.getKey() instanceof Foods) {
+                category = "Comida";
+            }
+
+            Product product = entry.getKey();
+            desc = product.getDescription();
+            pryce = String.valueOf(product.getPrice());
+            String quantity = String.valueOf(entry.getValue());
+
+            tableModel.addRow(new Object[]{category, desc, pryce, quantity});
+            products.add(product);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftBuyer();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Product selectedProduct = products.get(selectedRow);
+
+                        containerLeft.add(new JLabel(""));
+                        JButton btnRemoveProduct = new JButton("Remover produto selecionado");
+                        containerLeft.add(btnRemoveProduct);
+
+                        btnRemoveProduct.addActionListener(new ActionListener() {
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
+                                //facade.removeProduct(selectedProduct);
+                                JOptionPane.showMessageDialog(null, "Produto removido!");
+
+                                viewCart(); //atualizar a página
+                            }
+                        });
+
+                        containerLeft.repaint();
+                        containerLeft.revalidate();
+                    }
+                }
+            }
+        });
+
+        //adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
+
+        //grid para mostrar o preço total e também pode ser usado para mostrar os botões
+        JPanel gridHeader = new JPanel(new GridLayout(5, 1));
+        gridHeader.add(new JLabel("Preço total: " + facade.getTotalPrice()));
+        JButton btnOrder = new JButton("Finalizar pedido");
+        btnOrder.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (!facade.viewCart().isEmpty()){
+                    JOptionPane.showMessageDialog(null, "Ok!");
+                    facade.order();
+                }
+            }
+        });
+        gridHeader.add(new JLabel());
+        gridHeader.add(new JLabel());
+        gridHeader.add(new JLabel());
+        gridHeader.add(btnOrder);
+        containerCenter.add(gridHeader);
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void viewOrder(){
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        JLabel labelCenter = new JLabel("Pedidos", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        HashMap<String, String[]> list = new HashMap<>();
+        list.put("Categoria 1", new String[]{"Descrição 1", "10.0", "5"});
+        list.put("Categoria 2", new String[]{"Descrição 2", "20.0", "3"});
+        list.put("Categoria 3", new String[]{"Descrição 3", "15.0", "8"});
+
+
+
+        //criando um DefaultTableModel para armazenar os dados da tabela
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Categoria");
+        tableModel.addColumn("Descrição");
+        tableModel.addColumn("Preço");
+        tableModel.addColumn("Status");
+
+        //lista para armazenar os produtos correspondentes às linhas da tabela
+        List<Product> products = new ArrayList<>();
+
+
+        for (Map.Entry<Product, Order.OrderStatus> entry : this.facade.viewOrder().entrySet()) {
+            String category = "";
+            String desc;
+            String pryce;
+
+            if (entry.getKey() instanceof Electronics) {
+                category = "Eletrônico";
+            }
+            if (entry.getKey() instanceof Clothes) {
+                category = "Roupa";
+            }
+            if (entry.getKey() instanceof Foods) {
+                category = "Comida";
+            }
+
+            Product product = entry.getKey();
+            desc = product.getDescription();
+            pryce = String.valueOf(product.getPrice());
+            String status = String.valueOf(entry.getValue());
+
+            tableModel.addRow(new Object[]{category, desc, pryce, status});
+            products.add(product);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
 
         containerCenter.revalidate();
         containerCenter.repaint();

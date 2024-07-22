@@ -5,12 +5,10 @@ import java.util.HashMap;
 public class Stock {
     private Map<Product, Integer> products = new HashMap<>();
 
-    public Stock () {
-
-    }
+    public Stock () {}
 
     public void addProduct (Product product, int quantity) {
-        products.put(product, products.getOrDefault(product, 0) + quantity);
+        products.put(product, quantity);
     }
 
     public void removeProduct (Product product, int quantity) {
@@ -29,7 +27,7 @@ public class Stock {
         return products.getOrDefault(product, 0);
     }
 
-    public Map getAllProducts () {
+    public Map<Product, Integer> getAllProducts () {
         return products;
     }
 }
