@@ -30,7 +30,7 @@ public class SalesFacade {
         return this.cb.getNameUser();
     }
 
-    public void registerProduct(String type, String description, double pryce, int qtd) throws InvalidProductException {
+    public void registerProduct(String type, String description, double pryce, int qtd) {
         this.cb.registerProduct(type, pryce, description, qtd);
     }
 
@@ -38,7 +38,7 @@ public class SalesFacade {
         return this.cb.getAllProducts();
     }
 
-    public void removeProduct(Product product) throws InsufficientQuantityException {
+    public void removeProduct(Product product) {
         this.cb.removeProduct(product);
     }
 

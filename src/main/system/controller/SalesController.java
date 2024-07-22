@@ -40,19 +40,10 @@ public class SalesController {
         return this.user.getName();
     }
 
-    public void registerProduct(String type, double price, String description, int qtd) throws InvalidProductException {
+    public void registerProduct(String type, double price, String description, int qtd) {
         if (user instanceof Seller);
         {
             Seller seller = (Seller) user;
-
-            if (price <= 0) {
-                throw new InvalidProductException();
-            }
-
-            if (description == null) {
-                throw new InvalidProductException();
-            }
-
             this.stock.addProduct(seller.registerProduct(type, price, description), qtd); //cria e adiciona ao estoque
         }
     }
@@ -61,12 +52,7 @@ public class SalesController {
         return this.stock.getAllProducts();
     }
 
-    public void removeProduct(Product product) throws InsufficientQuantityException {
-        int quantity = this.stock.getQuantity(product);
-        if (quantity < quantity) {
-            throw new InsufficientQuantityException();
-        }
-
+    public void removeProduct(Product product) {
         this.stock.removeProduct(product, this.stock.getQuantity(product));
     }
 
