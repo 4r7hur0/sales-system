@@ -5,18 +5,20 @@ import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class SalesController {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
+    private LinkedList<Order> allOrders = new LinkedList<>();
     private User user; //usuário logado
     private Stock stock = new Stock();
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
         if (payment != 0) {
-            User buyer = new Buyer(name, login, password, email, address, payment);
+            User buyer = new Buyer(name, login, password, email, address);
             mapUsers.put(login, buyer);
             listUsers.add(buyer);
         }
@@ -40,11 +42,21 @@ public class SalesController {
         return this.user.getName();
     }
 
+ dev
+    public void registerProduct(String type, double pryce, String description, int qtd) {
+        StockInterface stockProxy = new StockProxy(this.stock, this.user);
+        if (user instanceof Seller);
+        {
+            Seller seller = (Seller) user;
+            Product product = seller.registerProduct(type, pryce, description);
+            stockProxy.addProduct(product, qtd);
+
     public void registerProduct(String type, double price, String description, int qtd) {
         if (user instanceof Seller);
         {
             Seller seller = (Seller) user;
             this.stock.addProduct(seller.registerProduct(type, price, description), qtd); //cria e adiciona ao estoque
+ master
         }
     }
 
@@ -52,8 +64,10 @@ public class SalesController {
         return this.stock.getAllProducts();
     }
 
+    //método para remover do estoque
     public void removeProduct(Product product) {
-        this.stock.removeProduct(product, this.stock.getQuantity(product));
+        StockInterface stockProxy = new StockProxy(this.stock, this.user);
+        stockProxy.removeProduct(product, this.stock.getQuantity(product));;
     }
 
     public void addInCart(Product product) {
@@ -69,7 +83,42 @@ public class SalesController {
     }
 
     public void order() {
-        this.user.getCart().checkout();
+        Order order = this.user.getCart().checkout();
+        this.user.addOrder(order);
+        this.allOrders.add(order);
     }
 
+    public Iterator<Order> viewOrder() {
+        return this.user.getOrders();
+    }
+
+    public PaymentMethod credit(String num, String name, String cvv) {
+        PaymentMethod payment = new CreditCardPayment(num, name, cvv);
+        this.user.getCart().setPaymentMethod(payment);
+        return payment;
+    }
+
+    public PaymentMethod payPal(String email) {
+        PaymentMethod payment = new PayPalMethod(email);
+        this.user.getCart().setPaymentMethod(payment);
+        return payment;
+    }
+
+    public PaymentMethod bankTransfer(String num, String name, String ag) {
+        PaymentMethod payment = new BankTransferPayment(num, ag, name);
+        this.user.getCart().setPaymentMethod(payment);
+        return payment;
+    }
+
+    public void modifyStatus(Order order) {
+        order.nextStatus();
+    }
+
+    public Iterator<Order> viewAllOrders() {
+        return this.allOrders.iterator();
+    }
+
+    public void removeProductCart(Product product){
+        this.user.getCart().removeItem(product);
+    }
 }

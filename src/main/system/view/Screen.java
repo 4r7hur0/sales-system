@@ -74,11 +74,9 @@ public class Screen extends Component implements Serializable {
         //definindo botões para o Container da Esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
-        JButton view = new JButton("Produtos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
-        containerLeft.add(view);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -94,12 +92,6 @@ public class Screen extends Component implements Serializable {
             }
         });
 
-        view.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                viewProductsBuyer();
-            }
-        });
     }
 
     public void registerUser() {
@@ -164,7 +156,6 @@ public class Screen extends Component implements Serializable {
                     public void actionPerformed(ActionEvent e) {
                         facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
                                 emailField.getText(), addressField.getText(), 0);
-                        JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
                         containerCenter.removeAll();
                         containerCenter.revalidate();
                         containerCenter.repaint();
@@ -180,7 +171,7 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 containerCenter.removeAll();
-                containerCenter.setLayout(new GridLayout(7, 2, 10, 10));
+                containerCenter.setLayout(new GridLayout(6, 2, 10, 10));
 
                 JLabel loginLabel = new JLabel("Digite o seu login:", SwingConstants.CENTER);
                 JTextField loginField = new JTextField();
@@ -207,12 +198,6 @@ public class Screen extends Component implements Serializable {
                 containerCenter.add(addressLabel);
                 containerCenter.add(addressField);
 
-                JLabel paymentLabel = new JLabel("Digite a sua forma de pagamento:", SwingConstants.CENTER);
-                JTextField paymentField = new JTextField();
-                containerCenter.add(paymentLabel);
-                containerCenter.add(paymentField);
-
-
                 JLabel sendLabel = new JLabel("Verifique se está tudo correto antes de enviar", SwingConstants.CENTER);
                 JButton sendButton = new JButton("Enviar");
                 containerCenter.add(sendLabel);
@@ -222,8 +207,7 @@ public class Screen extends Component implements Serializable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         facade.registerUser(nameField.getText(), loginField.getText(), passwordField.getText(),
-                                emailField.getText(), addressField.getText(), Integer.parseInt(paymentField.getText()));
-                        JOptionPane.showMessageDialog(null, "Usuário cadastrado com sucesso!");
+                                emailField.getText(), addressField.getText(), 1);
                         containerCenter.removeAll();
                         containerCenter.revalidate();
                         containerCenter.repaint();
@@ -277,7 +261,6 @@ public class Screen extends Component implements Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     User user = facade.loginUser(loginField.getText(), senhaField.getText());
-                    JOptionPane.showMessageDialog(null, "Você está logado!!");
                     //container da esquerda, somente os botões disponíveis para o usuário logado
                     if (user instanceof Seller){
                         buttonsLeftSeller();
@@ -300,7 +283,7 @@ public class Screen extends Component implements Serializable {
 
     public void buttonsLeftSeller(){
         containerLeft.removeAll();
-        containerLeft.add(new JLabel("Vendedor: " + facade.getNameUser()), JLabel.CENTER);
+        containerLeft.add(new JLabel("Vendedor: " + facade.getNameUser(), JLabel.CENTER));
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -310,11 +293,13 @@ public class Screen extends Component implements Serializable {
         JButton loginUser = new JButton("Fazer login");
         JButton registerProduct = new JButton("Cadastrar produto");
         JButton viewProducts = new JButton("Produtos à venda");
+        JButton productsSold = new JButton("Produtos vendidos");
 
         containerLeft.add(registerUser);
         containerLeft.add(loginUser);
         containerLeft.add(registerProduct);
         containerLeft.add(viewProducts);
+        containerLeft.add(productsSold);
 
         registerUser.addActionListener(new ActionListener() {
             @Override
@@ -348,13 +333,21 @@ public class Screen extends Component implements Serializable {
             }
         });
 
+        productsSold.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                buttonsLeftSeller();
+                productsSold();
+            }
+        });
+
         containerLeft.revalidate();
         containerLeft.repaint();
     }
 
     public void buttonsLeftBuyer() {
         containerLeft.removeAll();
-        containerLeft.add(new JLabel("Comprador: " + facade.getNameUser()), JLabel.CENTER);
+        containerLeft.add(new JLabel("Comprador: " + facade.getNameUser(), JLabel.CENTER));
         containerLeft.add(new JLabel());
         JLabel labelLeft = new JLabel("Selecione uma função: ", JLabel.CENTER);
         containerLeft.add(labelLeft);
@@ -407,6 +400,7 @@ public class Screen extends Component implements Serializable {
         viewOrders.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                buttonsLeftBuyer();
                 viewOrder();
             }
         });
@@ -470,7 +464,6 @@ public class Screen extends Component implements Serializable {
                         facade.registerProduct("food", descResField.getText(),
                                 Double.parseDouble(pryceField.getText()), Integer.parseInt(qtdField.getText()));
                     }
-                    JOptionPane.showMessageDialog(null, "Produto cadastrado!");
                 } catch (Exception ex) {
                     JOptionPane.showMessageDialog(null, "Informação incorreta sobre o produto!");
                 }
@@ -598,7 +591,6 @@ public class Screen extends Component implements Serializable {
                             public void actionPerformed(ActionEvent e) {
                                 //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
                                 facade.removeProduct(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto removido!");
 
                                 viewProductsSeller(); //atualizar a página
                             }
@@ -684,9 +676,7 @@ public class Screen extends Component implements Serializable {
                         btnaddProduct.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
                                 facade.addInCart(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto adicionado ao carrinho!");
 
                                 viewProductsBuyer(); //atualizar a página
                             }
@@ -779,10 +769,7 @@ public class Screen extends Component implements Serializable {
                         btnRemoveProduct.addActionListener(new ActionListener() {
                             @Override
                             public void actionPerformed(ActionEvent e) {
-                                //ainda falta criar o parâmetro para adicionar a quantidade do produto a ser removido
-                                //facade.removeProduct(selectedProduct);
-                                JOptionPane.showMessageDialog(null, "Produto removido!");
-
+                                facade.removeProductCart(selectedProduct);
                                 viewCart(); //atualizar a página
                             }
                         });
@@ -806,8 +793,8 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!facade.viewCart().isEmpty()){
-                    JOptionPane.showMessageDialog(null, "Ok!");
                     facade.order();
+                    paymentMethod();
                 }
             }
         });
@@ -821,9 +808,9 @@ public class Screen extends Component implements Serializable {
         containerCenter.repaint();
     }
 
-    public void viewOrder(){
+    public void viewOrder() {
         containerCenter.removeAll();
-        containerCenter.setLayout(new GridLayout(3, 1)); // Layout ajustado para 3 linhas
+        containerCenter.setLayout(new GridLayout(3, 1));
         JLabel labelCenter = new JLabel("Pedidos", JLabel.CENTER);
         Font font = new Font("Serif", Font.BOLD, 35);
         labelCenter.setFont(font);
@@ -831,53 +818,313 @@ public class Screen extends Component implements Serializable {
         labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         containerCenter.add(labelCenter);
 
-        HashMap<String, String[]> list = new HashMap<>();
-        list.put("Categoria 1", new String[]{"Descrição 1", "10.0", "5"});
-        list.put("Categoria 2", new String[]{"Descrição 2", "20.0", "3"});
-        list.put("Categoria 3", new String[]{"Descrição 3", "15.0", "8"});
-
-
-
-        //criando um DefaultTableModel para armazenar os dados da tabela
         DefaultTableModel tableModel = new DefaultTableModel();
         tableModel.addColumn("Categoria");
         tableModel.addColumn("Descrição");
         tableModel.addColumn("Preço");
+        tableModel.addColumn("Quantidade");
         tableModel.addColumn("Status");
 
-        //lista para armazenar os produtos correspondentes às linhas da tabela
         List<Product> products = new ArrayList<>();
 
+        Iterator<Order> iterator = this.facade.viewOrder();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            String status = order.getStateOrder();
 
-        for (Map.Entry<Product, Order.OrderStatus> entry : this.facade.viewOrder().entrySet()) {
-            String category = "";
-            String desc;
-            String pryce;
+            for (Map.Entry<Product, Integer> entry : order.getItems().entrySet()) {
+                String category = "";
+                String desc;
+                String pryce;
+                int quantity;
 
-            if (entry.getKey() instanceof Electronics) {
-                category = "Eletrônico";
+                if (entry.getKey() instanceof Electronics) {
+                    category = "Eletrônico";
+                }
+                if (entry.getKey() instanceof Clothes) {
+                    category = "Roupa";
+                }
+                if (entry.getKey() instanceof Foods) {
+                    category = "Comida";
+                }
+
+                Product product = entry.getKey();
+                desc = product.getDescription();
+                pryce = String.valueOf(product.getPrice());
+                quantity = entry.getValue();
+
+                tableModel.addRow(new Object[]{category, desc, pryce, quantity, status});
+                products.add(product);
             }
-            if (entry.getKey() instanceof Clothes) {
-                category = "Roupa";
-            }
-            if (entry.getKey() instanceof Foods) {
-                category = "Comida";
-            }
-
-            Product product = entry.getKey();
-            desc = product.getDescription();
-            pryce = String.valueOf(product.getPrice());
-            String status = String.valueOf(entry.getValue());
-
-            tableModel.addRow(new Object[]{category, desc, pryce, status});
-            products.add(product);
         }
 
         JTable table = new JTable(tableModel);
         table.setRowHeight(30);
         table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
 
-        //adicionando o JTable em um JScrollPane e depois ao container
+        JScrollPane scrollPane = new JScrollPane(table);
+        containerCenter.add(scrollPane);
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void paymentMethod() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 3, 10, 10));
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel("Forma de pagamento", JLabel.CENTER));
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        JPanel center = new JPanel(new GridLayout(3, 1, 10, 10));
+        containerCenter.add(center);
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+        containerCenter.add(new JLabel());
+
+        JButton btnCredit = new JButton("Cartão de crédito");
+        JButton btnPayPal = new JButton("PayPal");
+        JButton btnBank = new JButton("Transferência bancária");
+
+        center.add(btnCredit);
+        center.add(btnPayPal);
+        center.add(btnBank);
+
+        btnCredit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                paymentCredit();
+            }
+        });
+
+        btnPayPal.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                payPal();
+            }
+        });
+
+        btnBank.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bankTransfer();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void paymentCredit() {
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(4, 2));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+
+
+        JLabel numLabel = new JLabel("Número do cartão:", SwingConstants.CENTER);
+        JTextField numField = new JTextField();
+        center.add(numLabel);
+        center.add(numField);
+
+        JLabel nameLabel = new JLabel("Nome do proprietário:", SwingConstants.CENTER);
+        JTextField nameField = new JTextField();
+        center.add(nameLabel);
+        center.add(nameField);
+
+        JLabel cvvLabel = new JLabel("cvv:", SwingConstants.CENTER);
+        JTextField cvvField = new JTextField();
+        center.add(cvvLabel);
+        center.add(cvvField);
+
+        JLabel enviarLabel = new JLabel();
+        JButton enviarButton = new JButton("Enviar");
+        center.add(enviarLabel);
+        center.add(enviarButton);
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    facade.credit(numField.getText(), nameField.getText(), cvvField.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                }
+                containerCenter.removeAll();
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void payPal() {
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(4, 2));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+
+
+        JLabel emailLabel = new JLabel("Email:", SwingConstants.CENTER);
+        JTextField emailField = new JTextField();
+        center.add(emailLabel);
+        center.add(emailField);
+
+        JLabel enviarLabel = new JLabel();
+        JButton enviarButton = new JButton("Enviar");
+        center.add(enviarLabel);
+        center.add(enviarButton);
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    facade.payPal(emailField.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                }
+                containerCenter.removeAll();
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void bankTransfer() {
+        containerCenter.removeAll();
+        containerCenter.revalidate();
+
+        containerCenter.setLayout(new GridLayout(3, 3));
+        containerCenter.add(new Label());//adicionando componente vazia para escrever somente no centro do grid
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        Container center = new JPanel(new GridLayout(4, 2));
+        containerCenter.add(center);
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+        containerCenter.add(new Label());
+
+
+        JLabel numLabel = new JLabel("Conta bancária:", SwingConstants.CENTER);
+        JTextField numField = new JTextField();
+        center.add(numLabel);
+        center.add(numField);
+
+        JLabel agLabel = new JLabel("Agência:", SwingConstants.CENTER);
+        JTextField agField = new JTextField();
+        center.add(agLabel);
+        center.add(agField);
+
+        JLabel nameLabel = new JLabel("Nome do proprietário:", SwingConstants.CENTER);
+        JTextField nameField = new JTextField();
+        center.add(nameLabel);
+        center.add(nameField);
+
+        JLabel enviarLabel = new JLabel();
+        JButton enviarButton = new JButton("Enviar");
+        center.add(enviarLabel);
+        center.add(enviarButton);
+
+        enviarButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    facade.bankTransfer(numField.getText(), agField.getText(), nameField.getText());
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                }
+                containerCenter.removeAll();
+                containerCenter.revalidate();
+                containerCenter.repaint();
+            }
+        });
+
+        containerCenter.revalidate();
+        containerCenter.repaint();
+    }
+
+    public void productsSold() {
+        containerCenter.removeAll();
+        containerCenter.setLayout(new GridLayout(3, 1));
+        JLabel labelCenter = new JLabel("Produtos vendidos", JLabel.CENTER);
+        Font font = new Font("Serif", Font.BOLD, 35);
+        labelCenter.setFont(font);
+        labelCenter.setForeground(new Color(43, 169, 202));
+        labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
+        containerCenter.add(labelCenter);
+
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("Preço Total");
+        tableModel.addColumn("Quantidade");
+        tableModel.addColumn("Status");
+        tableModel.addColumn("Ação");
+
+        List<Order> orders = new ArrayList<>();
+
+        Iterator<Order> iterator = this.facade.viewAllOrders();
+        while (iterator.hasNext()) {
+            Order order = iterator.next();
+            String status = order.getStateOrder();
+
+            double totalPrice = 0;
+            int totalQuantity = 0;
+
+            for (Map.Entry<Product, Integer> entry : order.getItems().entrySet()) {
+                totalPrice += entry.getKey().getPrice() * entry.getValue();
+                totalQuantity += entry.getValue();
+            }
+
+            tableModel.addRow(new Object[]{totalPrice, totalQuantity, status, "Clique para alterar os status"});
+            orders.add(order);
+        }
+
+        JTable table = new JTable(tableModel);
+        table.setRowHeight(30);
+        table.setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
+
+        //capturar a seleção do usuário
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent event) {
+                buttonsLeftSeller();
+                if (!event.getValueIsAdjusting()) {
+                    int selectedRow = table.getSelectedRow();
+                    if (selectedRow != -1) {
+                        Order selectedOrder = orders.get(selectedRow);
+                        facade.modifyStatus(selectedOrder);
+                        productsSold();
+                    }
+                }
+            }
+        });
+
         JScrollPane scrollPane = new JScrollPane(table);
         containerCenter.add(scrollPane);
 

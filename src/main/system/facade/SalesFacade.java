@@ -1,13 +1,18 @@
 package main.system.facade;
 
 import main.system.controller.SalesController;
+ dev
+import main.system.model.*;
+
 import main.system.model.Order;
 import main.system.model.Product;
 import main.system.model.User;
 import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
+ master
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -57,7 +62,37 @@ public class SalesFacade {
         this.cb.order();
     }
 
+ dev
+    public Iterator<Order> viewOrder(){
+        return this.cb.viewOrder();
+    }
+
+    public PaymentMethod credit(String num, String name, String cvv) {
+        return this.cb.credit(num, name, cvv);
+    }
+
+    public PaymentMethod payPal(String email) {
+        return this.cb.payPal(email);
+    }
+
+    public PaymentMethod bankTransfer(String num, String ag, String name) {
+        return this.cb.bankTransfer(num, name, ag);
+    }
+
+    public Iterator<Order> viewAllOrders() {
+        return this.cb.viewAllOrders();
+    }
+
+    public void modifyStatus(Order order) {
+        this.cb.modifyStatus(order);
+    }
+
+    public void removeProductCart(Product product){
+        this.cb.removeProductCart(product);
+    }
+
 //    public Map<Product, Order.OrderStatus> viewOrder(){
 //        return this.cb.viewOrder();
 //    }
+ master
 }
