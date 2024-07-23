@@ -3,6 +3,12 @@ package main.system.facade;
 import main.system.controller.SalesController;
 import main.system.model.*;
 
+import main.system.model.Order;
+import main.system.model.Product;
+import main.system.model.User;
+import main.system.model.exception.InsufficientQuantityException;
+import main.system.model.exception.InvalidProductException;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -54,7 +60,7 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public MyIterator<Order> viewOrder(){
+    public Iterator<Order> viewOrder(){
         return this.cb.viewOrder();
     }
 
@@ -70,7 +76,7 @@ public class SalesFacade {
         return this.cb.bankTransfer(num, name, ag);
     }
 
-    public MyIterator<Order> viewAllOrders() {
+    public Iterator<Order> viewAllOrders() {
         return this.cb.viewAllOrders();
     }
 
@@ -82,35 +88,7 @@ public class SalesFacade {
         this.cb.removeProductCart(product);
     }
 
-    public HashMap<String, User> getMapUsers() {
-        return this.cb.getMapUsers();
-    }
-
-    public LinkedList<User> getListUsers() {
-        return this.cb.getListUsers();
-    }
-
-    public LinkedList<Order> getListOrder() {
-        return this.cb.getListOrder();
-    }
-
-    public void setMapUsers(HashMap<String, User> mapUsers){
-        this.cb.setMapUsers(mapUsers);
-    }
-
-    public void setListUsers(LinkedList<User> listUsers) {
-        this.cb.setListUsers(listUsers);
-    }
-
-    public void setAllOrders(LinkedList<Order> orders){
-        this.cb.setAllOrders(orders);
-    }
-
-    public Stock getStock() {
-        return this.cb.getStock();
-    }
-
-    public void setStock(Stock stock) {
-        this.cb.setStock(stock);
-    }
+//    public Map<Product, Order.OrderStatus> viewOrder(){
+//        return this.cb.viewOrder();
+//    }
 }

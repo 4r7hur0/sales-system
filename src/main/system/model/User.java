@@ -11,7 +11,7 @@ public abstract class User implements Serializable {
     private String password;
     private String email;
     private String address;
-    private ShppingCart cart = new ShppingCart();
+    private ShoppingCart cart = new ShoppingCart();
     private LinkedList<Order> orders = new LinkedList<>();
 
     public User (String name, String login, String password, String email, String address) {
@@ -40,7 +40,7 @@ public abstract class User implements Serializable {
 
     public abstract double getTotalPrice();
 
-    public ShppingCart getCart(){
+    public ShoppingCart getCart(){
         return this.cart;
     }
 

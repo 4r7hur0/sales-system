@@ -1,10 +1,9 @@
 package main.system.model;
 
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ShppingCart implements Serializable {
+public class ShoppingCart {
     private Map<Product, Integer> items = new HashMap<>();
     private PaymentMethod payment;
 

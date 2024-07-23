@@ -42,7 +42,7 @@ public class SalesController implements Serializable {
 
     public void registerProduct(String type, double pryce, String description, int qtd) {
         StockInterface stockProxy = new StockProxy(this.stock, this.user);
-        if (user instanceof Seller);
+        if (user instanceof Seller) ;
         {
             Seller seller = (Seller) user;
             Product product = seller.registerProduct(type, pryce, description);
