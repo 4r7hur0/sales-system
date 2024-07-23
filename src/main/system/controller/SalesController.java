@@ -141,4 +141,36 @@ public class SalesController implements Serializable {
     public void removeProductCart(Product product){
         this.user.getCart().removeItem(product);
     }
+
+    public HashMap<String, User> getMapUsers() {
+        return this.mapUsers;
+    }
+
+    public LinkedList<User> getListUsers() {
+        return this.listUsers;
+    }
+
+    public LinkedList<Order> getListOrder() {
+        return this.allOrders;
+    }
+
+    public Stock getStock() {
+        return this.stock;
+    }
+
+    public void setMapUsers(HashMap<String, User> mapUsers){
+        this.mapUsers = mapUsers;
+    }
+
+    public void setListUsers(LinkedList<User> listUsers) {
+        this.listUsers = listUsers;
+    }
+
+    public void setAllOrders(LinkedList<Order> orders){
+        this.allOrders = orders;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
+    }
 }
