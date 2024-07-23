@@ -865,8 +865,8 @@ public class Screen extends Component implements Serializable {
                 if (!facade.viewCart().isEmpty()){
                     try {
                         facade.order();
-                    } catch (EmptyCartException | PaymentMethodNotDefinedException | InsufficientQuantityException ex) {
-                        new Exception("Processo falhou!");
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(null, "Login ou senha incorreta!");
                     }
                     paymentMethod();
                 }
