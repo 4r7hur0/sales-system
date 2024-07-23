@@ -4,6 +4,9 @@ import main.system.facade.SalesFacade;
 import main.system.model.*;
 import main.system.model.Iterator;
 import main.system.model.MyIterator;
+import main.system.model.exception.EmptyCartException;
+import main.system.model.exception.InsufficientQuantityException;
+import main.system.model.exception.PaymentMethodNotDefinedException;
 
 import javax.swing.*;
 import java.awt.*;
@@ -860,7 +863,11 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!facade.viewCart().isEmpty()){
-                    facade.order();
+                    try {
+                        facade.order();
+                    } catch (EmptyCartException | PaymentMethodNotDefinedException | InsufficientQuantityException ex) {
+                        new Exception("Processo falhou!");
+                    }
                     paymentMethod();
                 }
             }

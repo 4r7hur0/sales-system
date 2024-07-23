@@ -6,12 +6,12 @@ import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
 import main.system.model.exception.PaymentMethodNotDefinedException;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesController {
+public class SalesController implements Serializable {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
     private LinkedList<Order> allOrders = new LinkedList<>();
@@ -108,7 +108,7 @@ public class SalesController {
         this.allOrders.add(order);
     }
 
-    public Iterator<Order> viewOrder() {
+    public MyIterator<Order> viewOrder() {
         return this.user.getOrders();
     }
 
@@ -134,8 +134,8 @@ public class SalesController {
         order.nextStatus();
     }
 
-    public Iterator<Order> viewAllOrders() {
-        return this.allOrders.iterator();
+    public MyIterator<Order> viewAllOrders() {
+        return new Iterator<>(allOrders);
     }
 
     public void removeProductCart(Product product){

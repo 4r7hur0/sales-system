@@ -1,8 +1,9 @@
 package main.system.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Iterator<T> implements MyIterator<T> {
+public class Iterator<T> implements MyIterator<T>, Serializable {
 
     private List<T> list; //o "t" é uma forma genérica de passar qualquer tipo de objeto para esta classe
     private int count;

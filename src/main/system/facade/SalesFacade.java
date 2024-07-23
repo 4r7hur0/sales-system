@@ -11,12 +11,13 @@ import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
 import main.system.model.exception.PaymentMethodNotDefinedException;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesFacade {
+public class SalesFacade implements Serializable {
     SalesController cb;
 
     public SalesFacade(){
@@ -62,7 +63,7 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public Iterator<Order> viewOrder(){
+    public MyIterator<Order> viewOrder(){
         return this.cb.viewOrder();
     }
 
@@ -78,7 +79,7 @@ public class SalesFacade {
         return this.cb.bankTransfer(num, name, ag);
     }
 
-    public Iterator<Order> viewAllOrders() {
+    public MyIterator<Order> viewAllOrders() {
         return this.cb.viewAllOrders();
     }
 
