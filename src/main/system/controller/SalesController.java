@@ -1,8 +1,10 @@
 package main.system.controller;
 
 import main.system.model.*;
+import main.system.model.exception.EmptyCartException;
 import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
+import main.system.model.exception.PaymentMethodNotDefinedException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -42,11 +44,14 @@ public class SalesController {
         return this.user.getName();
     }
 
-    public void registerProduct(String type, double pryce, String description, int qtd) {
+    public void registerProduct(String type, double pryce, String description, int qtd) throws InvalidProductException {
         StockInterface stockProxy = new StockProxy(this.stock, this.user);
         if (user instanceof Seller) ;
         {
             Seller seller = (Seller) user;
+            if (type == null || pryce < 0 || description == null || qtd <= 0) {
+                throw new InvalidProductException();
+            }
             Product product = seller.registerProduct(type, pryce, description);
             stockProxy.addProduct(product, qtd);
         }
@@ -62,6 +67,10 @@ public class SalesController {
         stockProxy.removeProduct(product, this.stock.getQuantity(product));;
     }
 
+    public void removeItemStockOrder(Product product, int quantity) {
+        this.stock.removeProduct(product, quantity);
+    }
+
     public void addInCart(Product product) {
         this.user.addInCart(product);
     }
@@ -74,8 +83,27 @@ public class SalesController {
         return this.user.getTotalPrice();
     }
 
-    public void order() {
+    public void order() throws InsufficientQuantityException, EmptyCartException, PaymentMethodNotDefinedException {
+        ShoppingCart shop = this.user.getCart();
+
+        if (shop.getItems() == null) {
+            throw new EmptyCartException();
+        }
+
+        if (shop.getPayment() == null) {
+            throw new PaymentMethodNotDefinedException();
+        }
+
+        for (Map.Entry<Product, Integer> product: shop.getItems().entrySet()) {
+            if (product.getValue() < stock.getQuantity(product.getKey())) {
+                throw new InsufficientQuantityException();
+            }
+        }
         Order order = this.user.getCart().checkout();
+
+        for (Map.Entry<Product, Integer> product: order.getItems().entrySet()) {
+            this.removeItemStockOrder(product.getKey(), product.getValue());
+        }
         this.user.addOrder(order);
         this.allOrders.add(order);
     }

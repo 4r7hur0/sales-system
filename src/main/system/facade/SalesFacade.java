@@ -6,8 +6,10 @@ import main.system.model.*;
 import main.system.model.Order;
 import main.system.model.Product;
 import main.system.model.User;
+import main.system.model.exception.EmptyCartException;
 import main.system.model.exception.InsufficientQuantityException;
 import main.system.model.exception.InvalidProductException;
+import main.system.model.exception.PaymentMethodNotDefinedException;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +35,7 @@ public class SalesFacade {
         return this.cb.getNameUser();
     }
 
-    public void registerProduct(String type, String description, double pryce, int qtd) {
+    public void registerProduct(String type, String description, double pryce, int qtd) throws InvalidProductException {
         this.cb.registerProduct(type, pryce, description, qtd);
     }
 
@@ -56,7 +58,7 @@ public class SalesFacade {
         return this.cb.getTotalPrice();
     }
 
-    public void order(){
+    public void order() throws EmptyCartException, InsufficientQuantityException, PaymentMethodNotDefinedException {
         this.cb.order();
     }
 
@@ -87,8 +89,4 @@ public class SalesFacade {
     public void removeProductCart(Product product){
         this.cb.removeProductCart(product);
     }
-
-//    public Map<Product, Order.OrderStatus> viewOrder(){
-//        return this.cb.viewOrder();
-//    }
 }
