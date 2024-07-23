@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class CreditCardPayment implements PaymentMethod {
+import java.io.Serializable;
+
+public class CreditCardPayment implements PaymentMethod, Serializable {
   private String cardNumber;
   private String cardHolderName;
   private String cvv;

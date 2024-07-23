@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class BankTransferPayment implements PaymentMethod {
+import java.io.Serializable;
+
+public class BankTransferPayment implements PaymentMethod, Serializable {
   private String bankAccoumtNumber;
   private String bankRoutingNumber;
   private String accountHolderName;

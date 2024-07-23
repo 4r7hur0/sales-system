@@ -81,4 +81,36 @@ public class SalesFacade {
     public void removeProductCart(Product product){
         this.cb.removeProductCart(product);
     }
+
+    public HashMap<String, User> getMapUsers() {
+        return this.cb.getMapUsers();
+    }
+
+    public LinkedList<User> getListUsers() {
+        return this.cb.getListUsers();
+    }
+
+    public LinkedList<Order> getListOrder() {
+        return this.cb.getListOrder();
+    }
+
+    public void setMapUsers(HashMap<String, User> mapUsers){
+        this.cb.setMapUsers(mapUsers);
+    }
+
+    public void setListUsers(LinkedList<User> listUsers) {
+        this.cb.setListUsers(listUsers);
+    }
+
+    public void setAllOrders(LinkedList<Order> orders){
+        this.cb.setAllOrders(orders);
+    }
+
+    public Stock getStock() {
+        return this.cb.getStock();
+    }
+
+    public void setStock(Stock stock) {
+        this.cb.setStock(stock);
+    }
 }

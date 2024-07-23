@@ -2,12 +2,13 @@ package main.system.controller;
 
 import main.system.model.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesController {
+public class SalesController implements Serializable {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
     private LinkedList<Order> allOrders = new LinkedList<>();
@@ -110,5 +111,37 @@ public class SalesController {
 
     public void removeProductCart(Product product){
         this.user.getCart().removeItem(product);
+    }
+
+    public HashMap<String, User> getMapUsers() {
+        return this.mapUsers;
+    }
+
+    public LinkedList<User> getListUsers() {
+        return this.listUsers;
+    }
+
+    public LinkedList<Order> getListOrder() {
+        return this.allOrders;
+    }
+
+    public Stock getStock() {
+        return this.stock;
+    }
+
+    public void setMapUsers(HashMap<String, User> mapUsers){
+        this.mapUsers = mapUsers;
+    }
+
+    public void setListUsers(LinkedList<User> listUsers) {
+        this.listUsers = listUsers;
+    }
+
+    public void setAllOrders(LinkedList<Order> orders){
+        this.allOrders = orders;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

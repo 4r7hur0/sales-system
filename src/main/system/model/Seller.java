@@ -1,7 +1,9 @@
 package main.system.model;
 
 
-public class Seller extends User {
+import java.io.Serializable;
+
+public class Seller extends User implements Serializable {
     private FactoryProduct factoryProduct = new ConcreteProductFactory();
 
     public Seller(String name, String login, String password, String email, String address){

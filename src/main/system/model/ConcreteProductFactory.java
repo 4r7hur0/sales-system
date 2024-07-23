@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class ConcreteProductFactory implements FactoryProduct {
+import java.io.Serializable;
+
+public class ConcreteProductFactory implements FactoryProduct, Serializable {
     public Product makeProduct (String type, double price, String description) {
         switch (type.toLowerCase()) {
             case "eletronic":

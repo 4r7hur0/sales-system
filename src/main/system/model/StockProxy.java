@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class StockProxy implements StockInterface {
+import java.io.Serializable;
+
+public class StockProxy implements StockInterface, Serializable {
     private StockInterface stock;
     private User user;
 

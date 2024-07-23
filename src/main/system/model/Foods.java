@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class Foods implements Product {
+import java.io.Serializable;
+
+public class Foods implements Product, Serializable {
     private String description;
     private String type;
     private double price;

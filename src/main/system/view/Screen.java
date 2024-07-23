@@ -10,6 +10,7 @@ import java.util.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -26,13 +27,51 @@ public class Screen extends Component implements Serializable {
         new Screen();
     }
 
+    private void saveFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        int opcao = fileChooser.showSaveDialog(this);
+        if (opcao == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            try (ObjectOutputStream objOut = new ObjectOutputStream(new FileOutputStream(file))) {
+                objOut.writeObject(this.facade.getMapUsers());
+                objOut.writeObject(this.facade.getListUsers());
+                objOut.writeObject(this.facade.getListOrder());
+                objOut.writeObject(this.facade.getStock());
+                JOptionPane.showMessageDialog(null, "Arquivo salvo com sucesso.");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao salvar o arquivo: " + ex.getMessage());
+            }
+        }
+    }
+
+    private void loadFile() {
+        JFileChooser escolherArquivo = new JFileChooser();
+        int opcao = escolherArquivo.showOpenDialog(this);
+        if (opcao == JFileChooser.APPROVE_OPTION) {
+            File file = escolherArquivo.getSelectedFile();
+            try (BufferedReader ler = new BufferedReader(new FileReader(file))) {
+                textArea.read(ler, null);
+                ObjectInputStream facadeSalva = new ObjectInputStream(new FileInputStream(file));
+                this.facade.setMapUsers((HashMap<String, User>) facadeSalva.readObject());
+                this.facade.setListUsers((LinkedList<User>) facadeSalva.readObject());
+                this.facade.setAllOrders((LinkedList<Order>) facadeSalva.readObject());
+                this.facade.setStock((Stock) facadeSalva.readObject());
+                JOptionPane.showMessageDialog(null, "Arquivo carregado com sucesso.");
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao carregar o arquivo: " + ex.getMessage());
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+
     public Screen() throws IOException, ClassNotFoundException {
         JFrame jFrame = new JFrame();
         jFrame.setVisible(true);
         jFrame.setTitle("Loja virtual");
         jFrame.setSize(1300, 600);
         jFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
 
         Container container = new JPanel(new BorderLayout());
         containerCenter = new JPanel(new GridLayout(7, 2, 10, 10));
@@ -42,12 +81,12 @@ public class Screen extends Component implements Serializable {
 
         jFrame.setContentPane(container);
 
-        //setando cores para cada container
+        // Setando cores para cada container
         containerCenter.setBackground(Color.white);
         containerLeft.setBackground(new Color(107, 178, 197));
         containerRight.setBackground(Color.white);
 
-        //definindo a posição de cada container
+        // Definindo a posição de cada container
         container.add(containerLeft, BorderLayout.WEST);
         container.add(containerCenter, BorderLayout.CENTER);
         container.add(containerRight, BorderLayout.EAST);
@@ -60,9 +99,9 @@ public class Screen extends Component implements Serializable {
         labelCenter.setBorder(BorderFactory.createLineBorder(Color.BLACK));
 
         ImageIcon image = new ImageIcon("src/main/system/view/logo-uefs.png");
-        Image sizeImage = image.getImage().getScaledInstance(120, 70, Image.SCALE_SMOOTH);//ajustando a imagem
+        Image sizeImage = image.getImage().getScaledInstance(120, 70, Image.SCALE_SMOOTH); // Ajustando a imagem
 
-        //cria um novo ImageIcon com a imagem redimensionada
+        //cria um novo imageicon com a imagem redimensionada
         ImageIcon setTamImagem = new ImageIcon(sizeImage);
         JLabel labelRight = new JLabel(setTamImagem, JLabel.CENTER);
 
@@ -71,7 +110,34 @@ public class Screen extends Component implements Serializable {
         containerCenter.add(labelCenter);
         containerRight.add(labelRight, BorderLayout.NORTH);
 
-        //definindo botões para o Container da Esquerda
+        //criando a barra de menu
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Arquivo");
+        JMenuItem saveFile = new JMenuItem("Salvar arquivo");
+        JMenuItem loadFile = new JMenuItem("Carregar arquivo");
+
+        fileMenu.add(saveFile);
+        fileMenu.add(loadFile);
+        fileMenu.setBorder(new LineBorder(Color.BLACK, 2));
+        menuBar.add(fileMenu);
+
+        jFrame.setJMenuBar(menuBar);
+
+        saveFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveFile();
+            }
+        });
+
+        loadFile.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                loadFile();
+            }
+        });
+
+        //definindo botões para o container da esquerda
         JButton registerUser = new JButton("Cadastrar usuário");
         JButton loginUser = new JButton("Fazer login");
 
@@ -91,7 +157,6 @@ public class Screen extends Component implements Serializable {
                 loginUser();
             }
         });
-
     }
 
     public void registerUser() {

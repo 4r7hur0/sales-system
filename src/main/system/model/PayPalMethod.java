@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class PayPalMethod implements PaymentMethod {
+import java.io.Serializable;
+
+public class PayPalMethod implements PaymentMethod, Serializable {
   private String email;
 
   public PayPalMethod (String email) {

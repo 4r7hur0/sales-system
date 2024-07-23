@@ -1,8 +1,9 @@
 package main.system.model;
+import java.io.Serializable;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Stock implements StockInterface{
+public class Stock implements StockInterface, Serializable {
     private Map<Product, Integer> products = new HashMap<>();
 
     public Stock () {}

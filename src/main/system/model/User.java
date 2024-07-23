@@ -1,8 +1,9 @@
 package main.system.model;
 
+import java.io.Serializable;
 import java.util.*;
 
-public abstract class User {
+public abstract class User implements Serializable {
     private String name;
     private String login;
     private String password;

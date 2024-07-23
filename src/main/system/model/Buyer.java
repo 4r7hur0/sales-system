@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class Buyer extends User {
+import java.io.Serializable;
+
+public class Buyer extends User implements Serializable {
     public Buyer(String name, String login, String password, String email, String address){
         super(name, login, password, email, address);
     }
