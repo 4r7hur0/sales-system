@@ -2,6 +2,8 @@ package main.system.view;
 
 import main.system.facade.SalesFacade;
 import main.system.model.*;
+import main.system.model.Iterator;
+import main.system.model.MyIterator;
 
 import javax.swing.*;
 import java.awt.*;
@@ -892,7 +894,7 @@ public class Screen extends Component implements Serializable {
 
         List<Product> products = new ArrayList<>();
 
-        Iterator<Order> iterator = this.facade.viewOrder();
+        MyIterator<Order> iterator = this.facade.viewOrder();
         while (iterator.hasNext()) {
             Order order = iterator.next();
             String status = order.getStateOrder();
@@ -1154,7 +1156,7 @@ public class Screen extends Component implements Serializable {
 
         List<Order> orders = new ArrayList<>();
 
-        Iterator<Order> iterator = this.facade.viewAllOrders();
+        MyIterator<Order> iterator = this.facade.viewAllOrders();
         while (iterator.hasNext()) {
             Order order = iterator.next();
             String status = order.getStateOrder();

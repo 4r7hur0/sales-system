@@ -1,12 +1,9 @@
 package main.system.controller;
 
 import main.system.model.*;
-import main.system.model.exception.InsufficientQuantityException;
-import main.system.model.exception.InvalidProductException;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -43,7 +40,6 @@ public class SalesController implements Serializable {
         return this.user.getName();
     }
 
- dev
     public void registerProduct(String type, double pryce, String description, int qtd) {
         StockInterface stockProxy = new StockProxy(this.stock, this.user);
         if (user instanceof Seller);
@@ -51,13 +47,6 @@ public class SalesController implements Serializable {
             Seller seller = (Seller) user;
             Product product = seller.registerProduct(type, pryce, description);
             stockProxy.addProduct(product, qtd);
-
-    public void registerProduct(String type, double price, String description, int qtd) {
-        if (user instanceof Seller);
-        {
-            Seller seller = (Seller) user;
-            this.stock.addProduct(seller.registerProduct(type, price, description), qtd); //cria e adiciona ao estoque
- master
         }
     }
 
@@ -89,7 +78,7 @@ public class SalesController implements Serializable {
         this.allOrders.add(order);
     }
 
-    public Iterator<Order> viewOrder() {
+    public MyIterator<Order> viewOrder() {
         return this.user.getOrders();
     }
 
@@ -115,8 +104,8 @@ public class SalesController implements Serializable {
         order.nextStatus();
     }
 
-    public Iterator<Order> viewAllOrders() {
-        return this.allOrders.iterator();
+    public MyIterator<Order> viewAllOrders() {
+        return new Iterator<>(this.allOrders);
     }
 
     public void removeProductCart(Product product){

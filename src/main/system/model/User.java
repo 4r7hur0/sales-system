@@ -1,5 +1,7 @@
 package main.system.model;
 
+import main.system.model.Iterator;
+import main.system.model.MyIterator;
 import java.io.Serializable;
 import java.util.*;
 
@@ -46,7 +48,7 @@ public abstract class User implements Serializable {
         this.orders.add(order);
     }
 
-    public Iterator<Order> getOrders(){
-        return this.orders.iterator();
+    public MyIterator<Order> getOrders(){
+        return new Iterator<>(this.orders);
     }
 }

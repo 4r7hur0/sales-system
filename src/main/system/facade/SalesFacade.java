@@ -54,7 +54,7 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public Iterator<Order> viewOrder(){
+    public MyIterator<Order> viewOrder(){
         return this.cb.viewOrder();
     }
 
@@ -70,7 +70,7 @@ public class SalesFacade {
         return this.cb.bankTransfer(num, name, ag);
     }
 
-    public Iterator<Order> viewAllOrders() {
+    public MyIterator<Order> viewAllOrders() {
         return this.cb.viewAllOrders();
     }
 
