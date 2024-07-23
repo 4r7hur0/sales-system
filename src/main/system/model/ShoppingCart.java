@@ -45,5 +45,9 @@ public class ShoppingCart {
     public void setPaymentMethod(PaymentMethod payment){
         this.payment = payment;
     }
+
+    public PaymentMethod getPayment() {
+        return payment;
+    }
 }
 

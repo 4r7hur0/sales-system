@@ -1,13 +1,17 @@
 package main.system.controller;
 
 import main.system.model.*;
+import main.system.model.exception.EmptyCartException;
+import main.system.model.exception.InsufficientQuantityException;
+import main.system.model.exception.InvalidProductException;
+import main.system.model.exception.PaymentMethodNotDefinedException;
 
-import java.io.Serializable;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesController implements Serializable {
+public class SalesController {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
     private LinkedList<Order> allOrders = new LinkedList<>();
@@ -40,11 +44,14 @@ public class SalesController implements Serializable {
         return this.user.getName();
     }
 
-    public void registerProduct(String type, double pryce, String description, int qtd) {
+    public void registerProduct(String type, double pryce, String description, int qtd) throws InvalidProductException {
         StockInterface stockProxy = new StockProxy(this.stock, this.user);
         if (user instanceof Seller) ;
         {
             Seller seller = (Seller) user;
+            if (type == null || pryce < 0 || description == null || qtd <= 0) {
+                throw new InvalidProductException();
+            }
             Product product = seller.registerProduct(type, pryce, description);
             stockProxy.addProduct(product, qtd);
         }
@@ -60,6 +67,10 @@ public class SalesController implements Serializable {
         stockProxy.removeProduct(product, this.stock.getQuantity(product));;
     }
 
+    public void removeItemStockOrder(Product product, int quantity) {
+        this.stock.removeProduct(product, quantity);
+    }
+
     public void addInCart(Product product) {
         this.user.addInCart(product);
     }
@@ -72,13 +83,32 @@ public class SalesController implements Serializable {
         return this.user.getTotalPrice();
     }
 
-    public void order() {
+    public void order() throws InsufficientQuantityException, EmptyCartException, PaymentMethodNotDefinedException {
+        ShoppingCart shop = this.user.getCart();
+
+        if (shop.getItems() == null) {
+            throw new EmptyCartException();
+        }
+
+        if (shop.getPayment() == null) {
+            throw new PaymentMethodNotDefinedException();
+        }
+
+        for (Map.Entry<Product, Integer> product: shop.getItems().entrySet()) {
+            if (product.getValue() < stock.getQuantity(product.getKey())) {
+                throw new InsufficientQuantityException();
+            }
+        }
         Order order = this.user.getCart().checkout();
+
+        for (Map.Entry<Product, Integer> product: order.getItems().entrySet()) {
+            this.removeItemStockOrder(product.getKey(), product.getValue());
+        }
         this.user.addOrder(order);
         this.allOrders.add(order);
     }
 
-    public MyIterator<Order> viewOrder() {
+    public Iterator<Order> viewOrder() {
         return this.user.getOrders();
     }
 
@@ -104,43 +134,11 @@ public class SalesController implements Serializable {
         order.nextStatus();
     }
 
-    public MyIterator<Order> viewAllOrders() {
-        return new Iterator<>(this.allOrders);
+    public Iterator<Order> viewAllOrders() {
+        return this.allOrders.iterator();
     }
 
     public void removeProductCart(Product product){
         this.user.getCart().removeItem(product);
-    }
-
-    public HashMap<String, User> getMapUsers() {
-        return this.mapUsers;
-    }
-
-    public LinkedList<User> getListUsers() {
-        return this.listUsers;
-    }
-
-    public LinkedList<Order> getListOrder() {
-        return this.allOrders;
-    }
-
-    public Stock getStock() {
-        return this.stock;
-    }
-
-    public void setMapUsers(HashMap<String, User> mapUsers){
-        this.mapUsers = mapUsers;
-    }
-
-    public void setListUsers(LinkedList<User> listUsers) {
-        this.listUsers = listUsers;
-    }
-
-    public void setAllOrders(LinkedList<Order> orders){
-        this.allOrders = orders;
-    }
-
-    public void setStock(Stock stock) {
-        this.stock = stock;
     }
 }
