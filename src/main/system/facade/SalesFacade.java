@@ -10,114 +10,113 @@ import main.system.model.exception.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class SalesFacade implements Serializable {
-    SalesController cb;
+    SalesController sb;
 
     public SalesFacade(){
-        this.cb = SalesController.getInstance();
+        this.sb = SalesController.getInstance();
     }
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
-        this.cb.registerUser(name, login, password, email, address, payment);
+        this.sb.registerUser(name, login, password, email, address, payment);
     }
 
     public User loginUser(String login, String senha) throws LoginFailedException {
-        return this.cb.loginUser(login , senha);
+        return this.sb.loginUser(login , senha);
     }
 
     public String getNameUser(){
-        return this.cb.getNameUser();
+        return this.sb.getNameUser();
     }
 
     public void registerProduct(String type, String description, double pryce, int qtd) throws InvalidProductException {
-        this.cb.registerProduct(type, pryce, description, qtd);
+        this.sb.registerProduct(type, pryce, description, qtd);
     }
 
     public Map<Product, Integer> getAllProducts(){
-        return this.cb.getAllProducts();
+        return this.sb.getAllProducts();
     }
 
     public void removeProduct(Product product) {
-        this.cb.removeProduct(product);
+        this.sb.removeProduct(product);
     }
 
     public void addInCart(Product product) {
-        this.cb.addInCart(product);
+        this.sb.addInCart(product);
     }
 
     public Map<Product, Integer> viewCart() {
-        return this.cb.viewCart();
+        return this.sb.viewCart();
     }
     public double getTotalPrice() {
-        return this.cb.getTotalPrice();
+        return this.sb.getTotalPrice();
     }
 
     public void order() throws EmptyCartException, InsufficientQuantityException, PaymentMethodNotDefinedException {
-        this.cb.order();
+        this.sb.order();
     }
 
     public MyIterator<Order> viewOrder(){
-        return this.cb.viewOrder();
+        return this.sb.viewOrder();
     }
 
     public PaymentMethod credit(String num, String name, String cvv) {
-        return this.cb.credit(num, name, cvv);
+        return this.sb.credit(num, name, cvv);
     }
 
     public PaymentMethod payPal(String email) {
-        return this.cb.payPal(email);
+        return this.sb.payPal(email);
     }
 
     public PaymentMethod bankTransfer(String num, String ag, String name) {
-        return this.cb.bankTransfer(num, name, ag);
+        return this.sb.bankTransfer(num, name, ag);
     }
 
     public MyIterator<Order> viewAllOrders() {
-        return this.cb.viewAllOrders();
+        return this.sb.viewAllOrders();
     }
 
     public void modifyStatus(Order order) {
-        this.cb.modifyStatus(order);
+        this.sb.modifyStatus(order);
     }
 
     public void removeProductCart(Product product){
-        this.cb.removeProductCart(product);
+        this.sb.removeProductCart(product);
     }
 
     public HashMap<String, User> getMapUsers() {
-        return this.cb.getMapUsers();
+        return this.sb.getMapUsers();
     }
 
     public LinkedList<User> getListUsers() {
-        return this.cb.getListUsers();
+        return this.sb.getListUsers();
     }
 
     public LinkedList<Order> getListOrder() {
-        return this.cb.getListOrder();
+        return this.sb.getListOrder();
     }
 
     public void setMapUsers(HashMap<String, User> mapUsers){
-        this.cb.setMapUsers(mapUsers);
+        this.sb.setMapUsers(mapUsers);
     }
 
     public void setListUsers(LinkedList<User> listUsers) {
-        this.cb.setListUsers(listUsers);
+        this.sb.setListUsers(listUsers);
     }
 
     public void setAllOrders(LinkedList<Order> orders){
-        this.cb.setAllOrders(orders);
+        this.sb.setAllOrders(orders);
     }
 
     public Stock getStock() {
-        return this.cb.getStock();
+        return this.sb.getStock();
     }
 
     public void setStock(Stock stock) {
-        this.cb.setStock(stock);
+        this.sb.setStock(stock);
     }
 
 }
