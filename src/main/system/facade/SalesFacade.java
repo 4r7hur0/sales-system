@@ -86,4 +86,5 @@ public class SalesFacade {
     public void removeProductCart(Product product){
         this.cb.removeProductCart(product);
     }
+
 }
