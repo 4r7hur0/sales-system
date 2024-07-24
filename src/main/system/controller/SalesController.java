@@ -1,10 +1,7 @@
 package main.system.controller;
 
 import main.system.model.*;
-import main.system.model.exception.EmptyCartException;
-import main.system.model.exception.InsufficientQuantityException;
-import main.system.model.exception.InvalidProductException;
-import main.system.model.exception.PaymentMethodNotDefinedException;
+import main.system.model.exception.*;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,6 +14,18 @@ public class SalesController {
     private LinkedList<Order> allOrders = new LinkedList<>();
     private User user; //usuário logado
     private Stock stock = new Stock();
+    private static SalesController instance;
+
+    private SalesController () {
+
+    }
+
+    public static SalesController getInstance () {
+        if (instance == null) {
+            return instance = new SalesController();
+        }
+        return instance;
+    }
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
         if (payment != 0) {
@@ -31,12 +40,12 @@ public class SalesController {
         }
     }
 
-    public User loginUser(String login, String senha) throws Exception {
+    public User loginUser(String login, String senha) throws LoginFailedException {
         User u = mapUsers.get(login);
         if (u != null && u.getPassword().equals(senha))
             user = u;
         else
-            throw new Exception("Login falhou");
+            throw new LoginFailedException();
         return u;
     }
 
@@ -94,11 +103,7 @@ public class SalesController {
             throw new PaymentMethodNotDefinedException();
         }
 
-        for (Map.Entry<Product, Integer> product: shop.getItems().entrySet()) {
-            if (product.getValue() < stock.getQuantity(product.getKey())) {
-                throw new InsufficientQuantityException();
-            }
-        }
+
         Order order = this.user.getCart().checkout();
 
         for (Map.Entry<Product, Integer> product: order.getItems().entrySet()) {

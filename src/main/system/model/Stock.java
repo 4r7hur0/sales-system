@@ -31,7 +31,7 @@ public class Stock implements StockInterface{
     }
 
     public int getQuantity (Product product) {
-        return products.getOrDefault(product, 0);
+        return products.get(product);
     }
 
     public Map<Product, Integer> getAllProducts () {
