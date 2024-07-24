@@ -21,7 +21,7 @@ public class SalesControllerTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        controller = new SalesController();
+        controller = SalesController.getInstance();
         electronics = new Electronics("Electronic", 100.0, "A cool gadget");
         clothes = new Clothes("Clothing", 50.0, "A nice shirt");
         foods = new Foods("Food", 10.0, "A tasty snack");

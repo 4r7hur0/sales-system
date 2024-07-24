@@ -6,10 +6,7 @@ import main.system.model.*;
 import main.system.model.Order;
 import main.system.model.Product;
 import main.system.model.User;
-import main.system.model.exception.EmptyCartException;
-import main.system.model.exception.InsufficientQuantityException;
-import main.system.model.exception.InvalidProductException;
-import main.system.model.exception.PaymentMethodNotDefinedException;
+import main.system.model.exception.*;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -21,14 +18,14 @@ public class SalesFacade implements Serializable {
     SalesController cb;
 
     public SalesFacade(){
-        this.cb = new SalesController();
+        this.cb.getInstance();
     }
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
         this.cb.registerUser(name, login, password, email, address, payment);
     }
 
-    public User loginUser(String login, String senha) throws Exception {
+    public User loginUser(String login, String senha) throws LoginFailedException {
         return this.cb.loginUser(login , senha);
     }
 
