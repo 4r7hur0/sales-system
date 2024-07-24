@@ -863,12 +863,7 @@ public class Screen extends Component implements Serializable {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!facade.viewCart().isEmpty()){
-                    try {
-                        facade.order();
-                    } catch (Exception ex) {
-                        JOptionPane.showMessageDialog(null, "Login ou senha incorreta!");
-                    }
-                    paymentMethod();
+                        paymentMethod();
                 }
             }
         });
@@ -1032,8 +1027,9 @@ public class Screen extends Component implements Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     facade.credit(numField.getText(), nameField.getText(), cvvField.getText());
+                    facade.order();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                    JOptionPane.showMessageDialog(null, "Quantidade em falta no estoque ou informações incorretas!");
                 }
                 containerCenter.removeAll();
                 containerCenter.revalidate();
@@ -1077,8 +1073,9 @@ public class Screen extends Component implements Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     facade.payPal(emailField.getText());
+                    facade.order();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                    JOptionPane.showMessageDialog(null, "Quantidade em falta no estoque ou informações incorretas!");
                 }
                 containerCenter.removeAll();
                 containerCenter.revalidate();
@@ -1132,8 +1129,9 @@ public class Screen extends Component implements Serializable {
             public void actionPerformed(ActionEvent e) {
                 try {
                     facade.bankTransfer(numField.getText(), agField.getText(), nameField.getText());
+                    facade.order();
                 } catch (Exception ex) {
-                    JOptionPane.showMessageDialog(null, "Incorreta!");
+                    JOptionPane.showMessageDialog(null, "Quantidade em falta no estoque ou informações incorretas!");
                 }
                 containerCenter.removeAll();
                 containerCenter.revalidate();

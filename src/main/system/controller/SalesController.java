@@ -94,11 +94,16 @@ public class SalesController implements Serializable {
             throw new PaymentMethodNotDefinedException();
         }
 
-        for (Map.Entry<Product, Integer> product: shop.getItems().entrySet()) {
-            if (product.getValue() < stock.getQuantity(product.getKey())) {
+        for (Map.Entry<Product, Integer> productEntry : shop.getItems().entrySet()) {
+            Product product = productEntry.getKey();
+            int requestedQuantity = productEntry.getValue();
+            int availableQuantity = stock.getQuantity(product);
+
+            if (requestedQuantity > availableQuantity) {
                 throw new InsufficientQuantityException();
             }
         }
+
         Order order = this.user.getCart().checkout();
 
         for (Map.Entry<Product, Integer> product: order.getItems().entrySet()) {
