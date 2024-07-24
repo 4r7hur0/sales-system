@@ -1,8 +1,9 @@
 package main.system.model;
+import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ProductPackage implements Product{
+public class ProductPackage implements Product, Serializable {
     private String description;
     private List<Product> products = new LinkedList<>();
 

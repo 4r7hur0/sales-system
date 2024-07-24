@@ -1,8 +1,9 @@
 package main.system.model;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
-public class Order {
+public class Order implements Serializable {
     private Map<Product, Integer> items;
     private OrderState status;
     private PaymentMethod paymentMethod;

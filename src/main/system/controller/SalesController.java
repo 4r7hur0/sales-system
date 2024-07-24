@@ -3,12 +3,12 @@ package main.system.controller;
 import main.system.model.*;
 import main.system.model.exception.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesController {
+public class SalesController implements Serializable {
     private HashMap<String, User> mapUsers = new HashMap<>();
     private LinkedList<User> listUsers = new LinkedList<>();
     private LinkedList<Order> allOrders = new LinkedList<>();
@@ -104,6 +104,18 @@ public class SalesController {
         }
 
 
+        for (Map.Entry<Product, Integer> productEntry : shop.getItems().entrySet()) {
+            Product product = productEntry.getKey();
+            int requestedQuantity = productEntry.getValue();
+            int availableQuantity = stock.getQuantity(product);
+
+            if (requestedQuantity > availableQuantity) {
+                throw new InsufficientQuantityException();
+            }
+        }
+
+
+
         Order order = this.user.getCart().checkout();
 
         for (Map.Entry<Product, Integer> product: order.getItems().entrySet()) {
@@ -113,7 +125,7 @@ public class SalesController {
         this.allOrders.add(order);
     }
 
-    public Iterator<Order> viewOrder() {
+    public MyIterator<Order> viewOrder() {
         return this.user.getOrders();
     }
 
@@ -139,11 +151,43 @@ public class SalesController {
         order.nextStatus();
     }
 
-    public Iterator<Order> viewAllOrders() {
-        return this.allOrders.iterator();
+    public MyIterator<Order> viewAllOrders() {
+        return new Iterator<>(allOrders);
     }
 
     public void removeProductCart(Product product){
         this.user.getCart().removeItem(product);
+    }
+
+    public HashMap<String, User> getMapUsers() {
+        return this.mapUsers;
+    }
+
+    public LinkedList<User> getListUsers() {
+        return this.listUsers;
+    }
+
+    public LinkedList<Order> getListOrder() {
+        return this.allOrders;
+    }
+
+    public Stock getStock() {
+        return this.stock;
+    }
+
+    public void setMapUsers(HashMap<String, User> mapUsers){
+        this.mapUsers = mapUsers;
+    }
+
+    public void setListUsers(LinkedList<User> listUsers) {
+        this.listUsers = listUsers;
+    }
+
+    public void setAllOrders(LinkedList<Order> orders){
+        this.allOrders = orders;
+    }
+
+    public void setStock(Stock stock) {
+        this.stock = stock;
     }
 }

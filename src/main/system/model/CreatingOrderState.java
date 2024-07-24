@@ -1,6 +1,8 @@
 package main.system.model;
 
-public class CreatingOrderState implements OrderState{
+import java.io.Serializable;
+
+public class CreatingOrderState implements OrderState, Serializable {
 
     @Override
     public void next(Order order) {

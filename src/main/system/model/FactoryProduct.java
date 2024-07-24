@@ -1,5 +1,7 @@
 package main.system.model;
 
+import java.io.Serializable;
+
 public interface FactoryProduct {
-    public Product makeProduct(String type, double price, String description);
+    Product makeProduct(String type, double price, String description);
 }

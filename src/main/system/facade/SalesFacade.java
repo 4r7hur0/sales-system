@@ -8,12 +8,13 @@ import main.system.model.Product;
 import main.system.model.User;
 import main.system.model.exception.*;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 
-public class SalesFacade {
+public class SalesFacade implements Serializable {
     SalesController cb;
 
     public SalesFacade(){
@@ -59,7 +60,7 @@ public class SalesFacade {
         this.cb.order();
     }
 
-    public Iterator<Order> viewOrder(){
+    public MyIterator<Order> viewOrder(){
         return this.cb.viewOrder();
     }
 
@@ -75,7 +76,7 @@ public class SalesFacade {
         return this.cb.bankTransfer(num, name, ag);
     }
 
-    public Iterator<Order> viewAllOrders() {
+    public MyIterator<Order> viewAllOrders() {
         return this.cb.viewAllOrders();
     }
 
@@ -85,6 +86,38 @@ public class SalesFacade {
 
     public void removeProductCart(Product product){
         this.cb.removeProductCart(product);
+    }
+
+    public HashMap<String, User> getMapUsers() {
+        return this.cb.getMapUsers();
+    }
+
+    public LinkedList<User> getListUsers() {
+        return this.cb.getListUsers();
+    }
+
+    public LinkedList<Order> getListOrder() {
+        return this.cb.getListOrder();
+    }
+
+    public void setMapUsers(HashMap<String, User> mapUsers){
+        this.cb.setMapUsers(mapUsers);
+    }
+
+    public void setListUsers(LinkedList<User> listUsers) {
+        this.cb.setListUsers(listUsers);
+    }
+
+    public void setAllOrders(LinkedList<Order> orders){
+        this.cb.setAllOrders(orders);
+    }
+
+    public Stock getStock() {
+        return this.cb.getStock();
+    }
+
+    public void setStock(Stock stock) {
+        this.cb.setStock(stock);
     }
 
 }
