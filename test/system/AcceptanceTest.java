@@ -86,7 +86,7 @@ public class AcceptanceTest {
         controller.order();
 
         // Verify the order is placed and cart is empty
-        Iterator<Order> orders = controller.viewOrder();
+        MyIterator<Order> orders = controller.viewOrder();
         assertTrue(orders.hasNext(), "Order should be placed");
         assertTrue(controller.viewCart().isEmpty(), "Cart should be empty after checkout");
 
