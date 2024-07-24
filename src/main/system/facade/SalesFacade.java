@@ -18,7 +18,7 @@ public class SalesFacade implements Serializable {
     SalesController cb;
 
     public SalesFacade(){
-        this.cb.getInstance();
+        this.cb = SalesController.getInstance();
     }
 
     public void registerUser(String name, String login, String password, String email, String address, int payment){
